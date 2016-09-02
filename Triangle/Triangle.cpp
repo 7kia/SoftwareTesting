@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Triangle.h"
 
+using namespace std;
 
 CTriangleSideIncorrect::CTriangleSideIncorrect(const std::string & message)
 	: std::exception(message.c_str())
@@ -8,16 +9,48 @@ CTriangleSideIncorrect::CTriangleSideIncorrect(const std::string & message)
 }
 
 
-TrianlgeType GetTriangleType(float firstSide
+std::vector<TrianlgeType> GetTriangleType(float firstSide
 							, float secondSide
 							, float thirdSide)
 {
-	CheckCorrectnessSides(firstSide
-						, secondSide
-						, thirdSide);
+	std::vector<TrianlgeType> types;
+
+	try
+	{
+		CheckCorrectnessSides(firstSide
+							, secondSide
+							, thirdSide);
+	}
+	catch (const CTriangleSideIncorrect & exeption)
+	{
+		cout << exeption.what() << endl;
+		types.push_back(TrianlgeType::None);
+		return types;
+	}
+	catch (const exception & exeption)// TODO : fix
+	{
+		throw;// Отправка исключения наружу
+	}
 
 
-	return TrianlgeType::Usual;
+	bool isEqualFirstAndSecond = (firstSide == secondSide);
+	bool isEqualFirstAndThird = (firstSide == thirdSide);
+	bool isEqualSecondAndThird = (secondSide == thirdSide);
+	
+	if (isEqualFirstAndSecond && isEqualSecondAndThird)
+	{
+		types.push_back(TrianlgeType::Equilateral);
+	}
+	else if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
+	{
+		types.push_back(TrianlgeType::Isosceles);
+	}
+	else
+	{
+		types.push_back(TrianlgeType::Usual);// TOOD : fix name
+	}
+
+	return types;
 }
 
 void CheckCorrectnessSides(float firstSide
