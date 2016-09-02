@@ -1,4 +1,12 @@
+#include "stdafx.h"
 #include "Triangle.h"
+
+
+CTriangleSideIncorrect::CTriangleSideIncorrect(const std::string & message)
+	: std::exception(message.c_str())
+{
+}
+
 
 TrianlgeType GetTriangleType(float firstSide
 							, float secondSide
@@ -9,7 +17,7 @@ TrianlgeType GetTriangleType(float firstSide
 						, thirdSide);
 
 
-	return TrianlgeType();
+	return TrianlgeType::Usual;
 }
 
 void CheckCorrectnessSides(float firstSide
@@ -30,6 +38,16 @@ void CheckCorrectnessSide(float side)
 {
 	if (side <= 0.f)
 	{
-		throw std::runtime_error("Side must be more zero");
+		throw CTriangleSideIncorrect(Messages::MESSAGE_SIDE_LESS_ZERO);
+	}
+}
+
+void CheckSum(float firstSide
+			, float secondSide
+			, float thirdSide)
+{
+	if (!((firstSide + secondSide) > thirdSide))
+	{
+		throw CTriangleSideIncorrect(Messages::MESSAGE_TRIANGLE_IS_DEGENERATE);
 	}
 }
