@@ -3,14 +3,23 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <array>
+
+static const float IN_DEGREES = 57.29f;
+static const float EPSILON = 0.1f;
 
 enum class TrianlgeType
 {
 		None
-	,	Usual
+	,	Versatile// Разносторонний
 	,	Isosceles// Равнобедренный
 	,	Equilateral // Равносторонний
+	,	AcuteAngled// Остроугольный
+	,	Rectangular// Прямоугольный
+	,	Obtuse// Тупоугольный
 };
+
+using TriangleSides = std::array<float, 3>;
 
 namespace Messages
 {
@@ -37,13 +46,20 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 										, float secondSide
 										, float thirdSide);
 
-void CheckCorrectnessSides(float firstSide
-							, float secondSide
-							, float thirdSide);
+void CheckCorrectnessSides(const TriangleSides & sides);
 
 void CheckCorrectnessSide(float side);
 
 void CheckSum(float firstSide
 			, float secondSide
 			, float thirdSide);
+
+void AddTypeBySides(std::vector<TrianlgeType> & types, const TriangleSides & sides);
+void AddTypeByAngles(std::vector<TrianlgeType>& types, const TriangleSides & sides);
+
+// Get in degreeds
+float GetAngleBetweenFirstAndSecondSides(float firstSide
+										, float secondSide
+										, float thirdSide);
+
 

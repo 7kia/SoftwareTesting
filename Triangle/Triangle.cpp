@@ -13,13 +13,12 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 							, float secondSide
 							, float thirdSide)
 {
+	TriangleSides sides = { firstSide, secondSide, thirdSide };
 	std::vector<TrianlgeType> types;
 
 	try
 	{
-		CheckCorrectnessSides(firstSide
-							, secondSide
-							, thirdSide);
+		CheckCorrectnessSides(sides);
 	}
 	catch (const CTriangleSideIncorrect & exeption)
 	{
@@ -33,38 +32,21 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 	}
 
 
-	bool isEqualFirstAndSecond = (firstSide == secondSide);
-	bool isEqualFirstAndThird = (firstSide == thirdSide);
-	bool isEqualSecondAndThird = (secondSide == thirdSide);
-	
-	if (isEqualFirstAndSecond && isEqualSecondAndThird)
-	{
-		types.push_back(TrianlgeType::Equilateral);
-	}
-	if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
-	{
-		types.push_back(TrianlgeType::Isosceles);
-	}
-	
-	if(types.empty())
-	{
-		types.push_back(TrianlgeType::Usual);// TOOD : fix name
-	}
+	AddTypeBySides(types, sides);
+	AddTypeByAngles(types, sides);
 
 	return types;
 }
 
-void CheckCorrectnessSides(float firstSide
-							, float secondSide
-							, float thirdSide)
+void CheckCorrectnessSides(const TriangleSides & sides)
 {
-	CheckCorrectnessSide(firstSide);
-	CheckCorrectnessSide(secondSide);
-	CheckCorrectnessSide(thirdSide);
+	CheckCorrectnessSide(sides[0]);
+	CheckCorrectnessSide(sides[1]);
+	CheckCorrectnessSide(sides[2]);
 
-	CheckSum(firstSide, secondSide, thirdSide);
-	CheckSum(thirdSide, firstSide, secondSide);
-	CheckSum(secondSide, thirdSide, firstSide);
+	CheckSum(sides[0], sides[1], sides[2]);
+	CheckSum(sides[2], sides[0], sides[1]);
+	CheckSum(sides[1], sides[2], sides[0]);
 
 }
 
@@ -84,4 +66,58 @@ void CheckSum(float firstSide
 	{
 		throw CTriangleSideIncorrect(Messages::MESSAGE_TRIANGLE_IS_DEGENERATE);
 	}
+}
+
+void AddTypeBySides(std::vector<TrianlgeType>& types, const TriangleSides & sides)
+{
+	bool isEqualFirstAndSecond = (sides[0] == sides[1]);
+	bool isEqualFirstAndThird = (sides[0] == sides[2]);
+	bool isEqualSecondAndThird = (sides[1] == sides[2]);
+
+	if (isEqualFirstAndSecond && isEqualSecondAndThird)
+	{
+		types.push_back(TrianlgeType::Equilateral);
+	}
+	if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
+	{
+		types.push_back(TrianlgeType::Isosceles);
+	}
+
+	if (types.empty())
+	{
+		types.push_back(TrianlgeType::Versatile);
+	}
+}
+
+void AddTypeByAngles(std::vector<TrianlgeType>& types, const TriangleSides & sides)
+{
+	float angleBetweenFirstAndSecond = GetAngleBetweenFirstAndSecondSides(sides[0], sides[1], sides[2]);
+	float angleBetweenSecondAndThird = GetAngleBetweenFirstAndSecondSides(sides[1], sides[2], sides[0]);
+	float angleBetweenFirstAndThird = GetAngleBetweenFirstAndSecondSides(sides[0], sides[2], sides[1]);
+
+
+	if ((IsBetween(angleBetweenFirstAndSecond, 90.f - EPSILON, 90.f + EPSILON))
+		|| (IsBetween(angleBetweenSecondAndThird, 90.f - EPSILON, 90.f + EPSILON))
+		|| (IsBetween(angleBetweenFirstAndThird, 90.f - EPSILON, 90.f + EPSILON)))
+	{
+		types.push_back(TrianlgeType::Rectangular);
+	}
+	else if ((angleBetweenFirstAndSecond > 90.f)
+		|| (angleBetweenSecondAndThird > 90.f)
+		|| (angleBetweenFirstAndThird > 90.f))
+	{
+		types.push_back(TrianlgeType::Obtuse);
+	}
+	else
+	{
+		types.push_back(TrianlgeType::AcuteAngled);
+	}
+}
+
+float GetAngleBetweenFirstAndSecondSides(float firstSide
+										, float secondSide
+										, float thirdSide)
+{
+	return acos((firstSide * firstSide + secondSide * secondSide - thirdSide * thirdSide)
+				/ (2.f * firstSide * secondSide)) * IN_DEGREES;
 }
