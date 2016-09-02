@@ -41,11 +41,12 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 	{
 		types.push_back(TrianlgeType::Equilateral);
 	}
-	else if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
+	if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
 	{
 		types.push_back(TrianlgeType::Isosceles);
 	}
-	else
+	
+	if(types.empty())
 	{
 		types.push_back(TrianlgeType::Usual);// TOOD : fix name
 	}
