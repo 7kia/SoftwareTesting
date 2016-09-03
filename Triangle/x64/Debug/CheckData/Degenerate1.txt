@@ -1,0 +1,2 @@
+Side must be more zero
+Is not triangle

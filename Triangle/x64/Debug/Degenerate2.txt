@@ -1,0 +1,2 @@
+The triangle is degenerate
+Is not triangle
