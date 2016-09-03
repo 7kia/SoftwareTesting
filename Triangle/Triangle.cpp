@@ -121,3 +121,44 @@ float GetAngleBetweenFirstAndSecondSides(float firstSide
 	return acos((firstSide * firstSide + secondSide * secondSide - thirdSide * thirdSide)
 				/ (2.f * firstSide * secondSide)) * IN_DEGREES;
 }
+
+std::string ToString(const std::vector<TrianlgeType>& types)
+{
+	std::string result;
+	for (const auto & element : types)
+	{
+		if (result.size() > 0)
+		{
+			result += ", ";
+		}
+
+		switch (element)
+		{
+		case TrianlgeType::None:
+			result += "Is not triangle\n";
+			break;
+		case TrianlgeType::AcuteAngled:
+			result += "Acute angled ";
+			break;
+		case TrianlgeType::Equilateral:
+			result += "Equilateral ";
+			break;
+		case TrianlgeType::Isosceles:
+			result += "Isosceles ";
+			break;
+		case TrianlgeType::Obtuse:
+			result += "Obtuse ";
+			break;
+		case TrianlgeType::Rectangular:
+			result += "Rectangular ";
+			break;
+		case TrianlgeType::Versatile:
+			result += "Versatile ";
+			break;
+		default:
+			break;
+		}
+	
+	}
+	return result;
+}

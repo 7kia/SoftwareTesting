@@ -62,4 +62,7 @@ float GetAngleBetweenFirstAndSecondSides(float firstSide
 										, float secondSide
 										, float thirdSide);
 
+std::string ToString(const std::vector<TrianlgeType>& types);
+
+
 

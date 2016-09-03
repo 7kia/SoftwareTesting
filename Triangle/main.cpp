@@ -16,22 +16,33 @@ namespace
 	static std::string MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT = "Amount arguments is incorrect";
 }
 
-bool CheckParametrs(int argc, char *argv[])
+void CheckParametrs(int argc, char *argv[])
 {
-	if (argc == AMOUNT_ARGUMENTS)
+	if (argc != AMOUNT_ARGUMENTS)
 	{
-		return true;
+		throw std::runtime_error(MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT + to_string(AMOUNT_ARGUMENTS));
 	}
-	cout << MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT + to_string(AMOUNT_ARGUMENTS) << endl;
-
-	return false;
 }
 
 int main(int argc, char *argv[])
 {
-	CheckParametrs(argc, argv);
 
-	TrianlgeType type = GetTriangleType(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	try
+	{
+		CheckParametrs(argc, argv);
+	}
+	catch (const std::runtime_error & exception)
+	{
+		cout << exception.what();
+		return 1;
+	}
+
+	cout << ToString(GetTriangleType(float(atof(argv[1]))
+									, float(atof(argv[2]))
+									, float(atof(argv[3]))
+									)
+					);
+
     return 0;
 }
 
