@@ -11,20 +11,16 @@ static const float EPSILON = 0.1f;
 enum class TrianlgeType
 {
 		None
-	,	Versatile// Разносторонний
+	,	Simple// Разносторонний
 	,	Isosceles// Равнобедренный
 	,	Equilateral // Равносторонний
-	,	AcuteAngled// Остроугольный
-	,	Rectangular// Прямоугольный
-	,	Obtuse// Тупоугольный
 };
 
 using TriangleSides = std::array<float, 3>;
 
 namespace Messages
 {
-	static const std::string MESSAGE_SIDE_LESS_ZERO = "Side must be more zero";
-	static const std::string MESSAGE_TRIANGLE_IS_DEGENERATE = "The triangle is degenerate";
+	static std::string MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT = "Укажите длины сторон в качестве параметров. Формат ввода: triangle.exe a b c";
 }
 
 
@@ -55,12 +51,7 @@ void CheckSum(float firstSide
 			, float thirdSide);
 
 void AddTypeBySides(std::vector<TrianlgeType> & types, const TriangleSides & sides);
-void AddTypeByAngles(std::vector<TrianlgeType>& types, const TriangleSides & sides);
 
-// Get in degreeds
-float GetAngleBetweenFirstAndSecondSides(float firstSide
-										, float secondSide
-										, float thirdSide);
 
 std::string ToString(const std::vector<TrianlgeType>& types);
 

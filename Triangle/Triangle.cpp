@@ -10,8 +10,8 @@ CTriangleSideIncorrect::CTriangleSideIncorrect(const std::string & message)
 
 
 std::vector<TrianlgeType> GetTriangleType(float firstSide
-							, float secondSide
-							, float thirdSide)
+										, float secondSide
+										, float thirdSide)
 {
 	TriangleSides sides = { firstSide, secondSide, thirdSide };
 	std::vector<TrianlgeType> types;
@@ -22,18 +22,18 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 	}
 	catch (const CTriangleSideIncorrect & exeption)
 	{
-		cout << exeption.what() << endl;
+		//cout << exeption.what() << endl;
 		types.push_back(TrianlgeType::None);
 		return types;
 	}
 	catch (const exception & exeption)// TODO : fix
 	{
+		(void)exeption;
 		throw;// Отправка исключения наружу
 	}
 
 
 	AddTypeBySides(types, sides);
-	AddTypeByAngles(types, sides);
 
 	return types;
 }
@@ -47,14 +47,13 @@ void CheckCorrectnessSides(const TriangleSides & sides)
 	CheckSum(sides[0], sides[1], sides[2]);
 	CheckSum(sides[2], sides[0], sides[1]);
 	CheckSum(sides[1], sides[2], sides[0]);
-
 }
 
 void CheckCorrectnessSide(float side)
 {
 	if (side <= 0.f)
 	{
-		throw CTriangleSideIncorrect(Messages::MESSAGE_SIDE_LESS_ZERO);
+		throw CTriangleSideIncorrect(Messages::MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT);
 	}
 }
 
@@ -64,7 +63,7 @@ void CheckSum(float firstSide
 {
 	if (!((firstSide + secondSide) > thirdSide))
 	{
-		throw CTriangleSideIncorrect(Messages::MESSAGE_TRIANGLE_IS_DEGENERATE);
+		throw CTriangleSideIncorrect(Messages::MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT);
 	}
 }
 
@@ -78,49 +77,18 @@ void AddTypeBySides(std::vector<TrianlgeType>& types, const TriangleSides & side
 	{
 		types.push_back(TrianlgeType::Equilateral);
 	}
-	if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
+	else if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
 	{
 		types.push_back(TrianlgeType::Isosceles);
 	}
 
 	if (types.empty())
 	{
-		types.push_back(TrianlgeType::Versatile);
+		types.push_back(TrianlgeType::Simple);
 	}
 }
 
-void AddTypeByAngles(std::vector<TrianlgeType>& types, const TriangleSides & sides)
-{
-	float angleBetweenFirstAndSecond = GetAngleBetweenFirstAndSecondSides(sides[0], sides[1], sides[2]);
-	float angleBetweenSecondAndThird = GetAngleBetweenFirstAndSecondSides(sides[1], sides[2], sides[0]);
-	float angleBetweenFirstAndThird = GetAngleBetweenFirstAndSecondSides(sides[0], sides[2], sides[1]);
 
-
-	if ((IsBetween(angleBetweenFirstAndSecond, 90.f - EPSILON, 90.f + EPSILON))
-		|| (IsBetween(angleBetweenSecondAndThird, 90.f - EPSILON, 90.f + EPSILON))
-		|| (IsBetween(angleBetweenFirstAndThird, 90.f - EPSILON, 90.f + EPSILON)))
-	{
-		types.push_back(TrianlgeType::Rectangular);
-	}
-	else if ((angleBetweenFirstAndSecond > 90.f)
-		|| (angleBetweenSecondAndThird > 90.f)
-		|| (angleBetweenFirstAndThird > 90.f))
-	{
-		types.push_back(TrianlgeType::Obtuse);
-	}
-	else
-	{
-		types.push_back(TrianlgeType::AcuteAngled);
-	}
-}
-
-float GetAngleBetweenFirstAndSecondSides(float firstSide
-										, float secondSide
-										, float thirdSide)
-{
-	return acos((firstSide * firstSide + secondSide * secondSide - thirdSide * thirdSide)
-				/ (2.f * firstSide * secondSide)) * IN_DEGREES;
-}
 
 std::string ToString(const std::vector<TrianlgeType>& types)
 {
@@ -135,25 +103,16 @@ std::string ToString(const std::vector<TrianlgeType>& types)
 		switch (element)
 		{
 		case TrianlgeType::None:
-			result += "Is not triangle\n";
-			break;
-		case TrianlgeType::AcuteAngled:
-			result += "Acute angled ";
+			result += "Не треугольник";// Is not triangle
 			break;
 		case TrianlgeType::Equilateral:
-			result += "Equilateral ";
+			result += "Равносторонний";//Equilateral 
 			break;
 		case TrianlgeType::Isosceles:
-			result += "Isosceles ";
+			result += "Равнобедренный";//Isosceles 
 			break;
-		case TrianlgeType::Obtuse:
-			result += "Obtuse ";
-			break;
-		case TrianlgeType::Rectangular:
-			result += "Rectangular ";
-			break;
-		case TrianlgeType::Versatile:
-			result += "Versatile ";
+		case TrianlgeType::Simple:
+			result += "Обычный";// Simple 
 			break;
 		default:
 			break;
