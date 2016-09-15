@@ -27,11 +27,11 @@ Triangle.exe 1 2 3 4 > incorrectAmountArgument4.txt
 
 IF NOT ERRORLEVEL 1 GOTO err
 
-FC /b incorrectAmountArgument4s.txt CheckData/invalidArguments.txt
+FC /b incorrectAmountArgument4.txt CheckData/invalidArguments.txt
 
 
 
-echo Точка допустимый , символ но одна точка не число
+echo Точка допустимый символ ,но одна точка не число
 Triangle.exe . 2 1  > notNumeric1.txt
 
 IF NOT ERRORLEVEL 1 GOTO err
@@ -95,45 +95,30 @@ FC /b notNumeric9.txt CheckData/invalidArguments.txt
 
 
 
-# >> Degenerate1.txt
+echo Аргументом не может быть отрицательное число
 Triangle.exe -1 2 3 >> Degenerate1.txt
-IF ERRORLEVEL 1 GOTO err
-FC /b Degenerate1.txt CheckData/degenerate1.txt
+IF NOT ERRORLEVEL 1 GOTO err
+FC /b Degenerate1.txt CheckData/invalidArguments.txt
 
-# >> Degenerate2.txt
+echo Вырожденный треугольник(не треуголбник)
 Triangle.exe 1 2 3 >> Degenerate2.txt
 IF ERRORLEVEL 1 GOTO err
-FC /b Degenerate2.txt CheckData/degenerate2.txt
+FC /b Degenerate2.txt CheckData/NotTrianlge.txt
 
-# >> Isosceles1.txt
-Triangle.exe 2 2 3 >> Isosceles1.txt 
+echo Равнобедренный треугольник
+Triangle.exe 2 2 3 >> Isosceles.txt 
 IF ERRORLEVEL 1 GOTO err
-FC /b Isosceles1.txt CheckData/Isosceles1.txt
+FC /b Isosceles.txt CheckData/Isosceles.txt
 
-# >> Equilateral1.txt
-Triangle.exe 2 2 2 >> Equilateral1.txt 
+echo Равносторонний треугольник
+Triangle.exe 2 2 2 >> Equilateral.txt 
 IF ERRORLEVEL 1 GOTO err
-FC /b Equilateral1.txt CheckData/Equilateral1.txt
+FC /b Equilateral.txt CheckData/Equilateral.txt
 
-# >> Versatile1.txt
-Triangle.exe 2 4 3 >> Versatile1.txt 
+echo Обычный треугольник
+Triangle.exe 2 4 3 >> Simple.txt 
 IF ERRORLEVEL 1 GOTO err
-FC /b Versatile1.txt CheckData/Versatile1.txt
-
-# >> Rectangular1.txt
-Triangle.exe 3 4 5 >> Rectangular1.txt 
-IF ERRORLEVEL 1 GOTO err
-FC /b Rectangular1.txt CheckData/Rectangular1.txt
-
-# >> Rectangular2.txt
-Triangle.exe 3 4.24 3 >> Rectangular2.txt 
-IF ERRORLEVEL 1 GOTO err
-FC /b Rectangular2.txt CheckData/Rectangular2.txt
-
-# >> Obtuse2.txt
-Triangle.exe 3 5.19615 3 >> Obtuse2.txt 
-IF ERRORLEVEL 1 GOTO err
-FC /b Obtuse2.txt CheckData/Obtuse2.txt
+FC /b Simple.txt CheckData/Simple.txt
 
 ECHO Program testing succeeded :-) 
 PAUSE
