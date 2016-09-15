@@ -1,2 +1,2 @@
-The triangle is degenerate
-Is not triangle
+Этот треугольник вырожденный
+Это не треугольник

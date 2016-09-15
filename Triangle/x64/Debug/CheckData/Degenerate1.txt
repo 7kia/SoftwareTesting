@@ -1,2 +1,2 @@
-Side must be more zero
-Is not triangle
+Длинна стороны должна быть больше 0
+Это не треугольник

@@ -1,1 +1,1 @@
-Equilateral , Isosceles , Acute angled 
+Равносторонний , Равнобедренный , Остроугольный 
