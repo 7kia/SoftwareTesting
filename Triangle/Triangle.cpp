@@ -20,9 +20,10 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 	{
 		CheckCorrectnessSides(sides);
 	}
-	catch (const CTriangleSideIncorrect & exeption)
+	catch (const CTriangleSideIncorrect & exception)
 	{
 		//cout << exeption.what() << endl;
+		(void)exception;
 		types.push_back(TrianlgeType::None);
 		return types;
 	}
@@ -95,10 +96,6 @@ std::string ToString(const std::vector<TrianlgeType>& types)
 	std::string result;
 	for (const auto & element : types)
 	{
-		if (result.size() > 0)
-		{
-			result += ", ";
-		}
 
 		switch (element)
 		{

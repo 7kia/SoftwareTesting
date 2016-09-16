@@ -100,7 +100,7 @@ Triangle.exe -1 2 3 >> Degenerate1.txt
 IF NOT ERRORLEVEL 1 GOTO err
 FC /b Degenerate1.txt CheckData/invalidArguments.txt
 
-echo Вырожденный треугольник(не треуголбник)
+echo Вырожденный треугольник(не треугольник)
 Triangle.exe 1 2 3 >> Degenerate2.txt
 IF ERRORLEVEL 1 GOTO err
 FC /b Degenerate2.txt CheckData/NotTrianlge.txt
