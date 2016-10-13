@@ -13,7 +13,6 @@ queuedURL = ""
 
 def CheckReference(page):
     try:
-
         code = urllib.urlopen(page).getcode()
         # 2xx - Success
         # 301 Moved Permanently — запрошенный документ был окончательно перенесен на новый URI,
@@ -30,8 +29,10 @@ def CheckReference(page):
             failedUrl.append(page + " " + status)
             # print message if not internet
 
-    except socket.error, error:
-        print "Ping Error: ", error
+
+    except IOError as err:
+        #print("IOError error: {0}".format(err))
+        print "Невозможно открыть указанную страницу {0}. Пожалуйста, проверьте соединение с интернетом.".format(page)
     else:
         status = str(code)
         usedUrls.append(page + " " + status)
@@ -54,8 +55,7 @@ def CheckLinksFromPage(url):
                 # Check if the reference breaked
                 CheckReference(urlList)
 
-
-#/////////////////////////////////////////////#
+# /////////////////////////////////////////////#
 # \/              Main                     \/ #
 def MainFunction(argv):
     
@@ -66,7 +66,16 @@ def MainFunction(argv):
     else:
         queuedURL = argv[1]
 
-    CheckLinksFromPage(queuedURL)
+
+    isErrorInURL = True
+    while (isErrorInURL):
+        try:
+            CheckLinksFromPage(queuedURL)
+            break
+        except urllib2.URLError as err:
+            queuedURL = raw_input("Введенный адрес не является корректным URL."
+                                  "Пожалуйста, введите адрес в формате http://path-to-site.com"
+                                  "Введите URL: ")
 
     correctRef = open("AllReference.txt", 'w')
     for url in usedUrls:
@@ -79,6 +88,8 @@ def MainFunction(argv):
     incorrectRef.close()
 
     print ("Program executed")
+
+    #"https://www.python.org/"
 #/////////////////////////////////////////////#
 
 MainFunction(sys.argv)
