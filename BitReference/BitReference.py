@@ -1,5 +1,5 @@
 # coding=utf-8
-import sys
+import socket, urllib,  sys
 import re, urllib, urllib2, urlparse, os
 
 FailedPages = []
@@ -7,33 +7,34 @@ FailedPages = []
 # @param url(type string)
 # Check bit urls in getted "url"
 #/////////////////////////////////////////////
-queuedURL = ""
 usedUrls = []
-FailedUrl = []
-startUrl = ''
+failedUrl = []
+queuedURL = ""
 
-
-def CheckReference(pages):
+def CheckReference(page):
     try:
-        for page_url in pages:
-            code = urllib.urlopen(page_url).getcode()
-            # 2xx - Success
-            # 301 Moved Permanently — запрошенный документ был окончательно перенесен на новый URI,
-            #  указанный в поле Location заголовка. Некоторые клиенты некорректно ведут себя при
-            # обработке данного кода. Появился в HTTP/1.0.
 
-            # 302 Found, 302 Moved Temporarily — запрошенный документ временно доступен
-            # по другому URI, указанному в заголовке в поле Location. Этот код может
-            # быть использован, например, при управляемом сервером согласовании
-            # содержимого. Некоторые клиенты некорректно ведут себя при обработке
-            # данного кода. Введено в HTTP/1.0.
-            if (code not in [200, 301]):
-                FailedUrl.append(page_url)
-    # print message if not internet
+        code = urllib.urlopen(page).getcode()
+        # 2xx - Success
+        # 301 Moved Permanently — запрошенный документ был окончательно перенесен на новый URI,
+        #  указанный в поле Location заголовка. Некоторые клиенты некорректно ведут себя при
+        # обработке данного кода. Появился в HTTP/1.0.
+
+        # 302 Found, 302 Moved Temporarily — запрошенный документ временно доступен
+        # по другому URI, указанному в заголовке в поле Location. Этот код может
+        # быть использован, например, при управляемом сервером согласовании
+        # содержимого. Некоторые клиенты некорректно ведут себя при обработке
+        # данного кода. Введено в HTTP/1.0.
+        if (code not in [200, 301]):
+            status = str(code)
+            failedUrl.append(page + " " + status)
+            # print message if not internet
+
     except socket.error, error:
         print "Ping Error: ", error
     else:
-        usedUrls.append(pages)
+        status = str(code)
+        usedUrls.append(page + " " + status)
 
 
 def CheckLinksFromPage(url):
@@ -57,22 +58,24 @@ def CheckLinksFromPage(url):
 #/////////////////////////////////////////////#
 # \/              Main                     \/ #
 def MainFunction(argv):
-
+    
     if (len(sys.argv) == 1):
-        queuedURL = raw_input("No parameters. Please input URL: ")
+        queuedURL = raw_input("Укажите адрес страницы в качестве параметра. "
+                              "Формат ввода link_checker.exe http://path-to-site.com. "
+                              "Введите URL: ")
     else:
         queuedURL = argv[1]
 
-    CheckLinksFromPage(queuedURL, startUrl)
+    CheckLinksFromPage(queuedURL)
 
     correctRef = open("AllReference.txt", 'w')
-    for s in usedUrls:
-        correctRef.write(s + '\n')
+    for url in usedUrls:
+        correctRef.write(url + '\n')
     correctRef.close()
 
     incorrectRef = open("InvalidRefernce.txt", 'w')
-    for s in FailedUrl:
-        incorrectRef.write(s + '\n')
+    for url in failedUrl:
+        incorrectRef.write(url + '\n')
     incorrectRef.close()
 
     print ("Program executed")
