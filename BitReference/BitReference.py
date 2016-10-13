@@ -1,6 +1,6 @@
 # coding=utf-8
-import socket, urllib,  sys
-import re, urllib, urllib2, urlparse, os
+import sys
+import re, urllib, urllib2, urlparse
 
 FailedPages = []
 #/////////////////////////////////////////////
@@ -32,7 +32,8 @@ def CheckReference(page):
 
     except IOError as err:
         #print("IOError error: {0}".format(err))
-        print "Невозможно открыть указанную страницу {0}. Пожалуйста, проверьте соединение с интернетом.".format(page)
+        print "Невозможно открыть указанную страницу {0}.\n" \
+              "Пожалуйста, проверьте соединение с интернетом.".format(page)
     else:
         status = str(code)
         usedUrls.append(page + " " + status)
@@ -60,8 +61,8 @@ def CheckLinksFromPage(url):
 def MainFunction(argv):
     
     if (len(sys.argv) == 1):
-        queuedURL = raw_input("Укажите адрес страницы в качестве параметра. "
-                              "Формат ввода link_checker.exe http://path-to-site.com. "
+        queuedURL = raw_input("Укажите адрес страницы в качестве параметра.\n"
+                              "Формат ввода link_checker.exe http://path-to-site.com.\n"
                               "Введите URL: ")
     else:
         queuedURL = argv[1]
@@ -72,10 +73,11 @@ def MainFunction(argv):
         try:
             CheckLinksFromPage(queuedURL)
             break
-        except urllib2.URLError as err:
-            queuedURL = raw_input("Введенный адрес не является корректным URL."
-                                  "Пожалуйста, введите адрес в формате http://path-to-site.com"
+        except (urllib2.URLError, ValueError) as err:
+            queuedURL = raw_input("Введенный адрес не является корректным URL.\n"
+                                  "Пожалуйста, введите адрес в формате http://path-to-site.com\n"
                                   "Введите URL: ")
+            continue
 
     correctRef = open("AllReference.txt", 'w')
     for url in usedUrls:
