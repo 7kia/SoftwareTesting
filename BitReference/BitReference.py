@@ -1,15 +1,45 @@
+# coding=utf-8
+import sys
 import re, urllib, urllib2, urlparse, os
 
+FailedPages = []
 #/////////////////////////////////////////////
 # @param url(type string)
 # Check bit urls in getted "url"
 #/////////////////////////////////////////////
-def checkBitReference(url):
+queuedURL = ""
+usedUrls = []
+FailedUrl = []
+startUrl = ''
+
+
+def CheckReference(pages):
+    try:
+        for page_url in pages:
+            code = urllib.urlopen(page_url).getcode()
+            # 2xx - Success
+            # 301 Moved Permanently — запрошенный документ был окончательно перенесен на новый URI,
+            #  указанный в поле Location заголовка. Некоторые клиенты некорректно ведут себя при
+            # обработке данного кода. Появился в HTTP/1.0.
+
+            # 302 Found, 302 Moved Temporarily — запрошенный документ временно доступен
+            # по другому URI, указанному в заголовке в поле Location. Этот код может
+            # быть использован, например, при управляемом сервером согласовании
+            # содержимого. Некоторые клиенты некорректно ведут себя при обработке
+            # данного кода. Введено в HTTP/1.0.
+            if (code not in [200, 301]):
+                FailedUrl.append(page_url)
+    # print message if not internet
+    except socket.error, error:
+        print "Ping Error: ", error
+    else:
+        usedUrls.append(pages)
+
+
+def CheckLinksFromPage(url):
     if not (url in usedUrls):
         usedUrls.append(url)
         content = urllib2.urlopen(url).read()
-
-        #print url# I want know current url
 
         # Find address data
         DataUrls = re.findall('href="(.*?)"', content)
@@ -17,24 +47,35 @@ def checkBitReference(url):
         # Conversion in absolute address
         convertDataUrls = [urlparse.urljoin(url, urlI) for urlI in DataUrls]
 
-
         for urlList in convertDataUrls:
             nameFile = urlList.rsplit('/', 1)[-1]
             if '.htm' in nameFile or '.html' in nameFile:
-                checkBitReference(urlList)
-#/////////////////////////////////////////////
-# @param url(type string)
-# Check bit url or not
-#/////////////////////////////////////////////
-def CheckSait(url):
-    f = 0;# TODO : write
+                # Check if the reference breaked
+                CheckReference(urlList)
 
 
 #/////////////////////////////////////////////#
 # \/              Main                     \/ #
+def MainFunction(argv):
 
-url = "https://www.python.org/"
+    if (len(sys.argv) == 1):
+        queuedURL = raw_input("No parameters. Please input URL: ")
+    else:
+        queuedURL = argv[1]
 
-usedUrls = []
-checkBitReference(url)
+    CheckLinksFromPage(queuedURL, startUrl)
+
+    correctRef = open("AllReference.txt", 'w')
+    for s in usedUrls:
+        correctRef.write(s + '\n')
+    correctRef.close()
+
+    incorrectRef = open("InvalidRefernce.txt", 'w')
+    for s in FailedUrl:
+        incorrectRef.write(s + '\n')
+    incorrectRef.close()
+
+    print ("Program executed")
 #/////////////////////////////////////////////#
+
+MainFunction(sys.argv)
