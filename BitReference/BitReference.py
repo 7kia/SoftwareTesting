@@ -34,10 +34,11 @@ def CheckReference(page):
             status = str(code)
             correctUrls.append(page + " " + status)
 
-    except IOError as err:
+    except BaseException as err:
         # print("IOError error: {0}".format(err))
         print "Невозможно открыть указанную страницу {0}.\n" \
               "Пожалуйста, проверьте соединение с интернетом.".format(page)
+        exit()
 
 
 def CheckLinksFromPage(url):
@@ -47,7 +48,7 @@ def CheckLinksFromPage(url):
 
         try:
             response = urllib2.urlopen(request)
-        except BaseException, err:
+        except BaseException as err:
             print "Невозможно открыть указанную страницу {0}.\n" \
                   "Пожалуйста, проверьте соединение с интернетом.".format(url)
         else:
