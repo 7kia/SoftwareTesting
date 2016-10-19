@@ -3,13 +3,15 @@ import sys
 import re, urllib, urllib2, urlparse
 
 FailedPages = []
-#/////////////////////////////////////////////
+# /////////////////////////////////////////////
 # @param url(type string)
 # Check bit urls in getted "url"
-#/////////////////////////////////////////////
+# /////////////////////////////////////////////
 usedUrls = []
+correctUrls = []
 failedUrl = []
 queuedURL = ""
+
 
 def CheckReference(page):
     try:
@@ -28,45 +30,56 @@ def CheckReference(page):
             status = str(code)
             failedUrl.append(page + " " + status)
             # print message if not internet
-
+        else:
+            status = str(code)
+            correctUrls.append(page + " " + status)
 
     except IOError as err:
-        #print("IOError error: {0}".format(err))
+        # print("IOError error: {0}".format(err))
         print "Невозможно открыть указанную страницу {0}.\n" \
               "Пожалуйста, проверьте соединение с интернетом.".format(page)
-    else:
-        status = str(code)
-        usedUrls.append(page + " " + status)
 
 
 def CheckLinksFromPage(url):
+
     if not (url in usedUrls):
-        usedUrls.append(url)
-        content = urllib2.urlopen(url).read()
+        request = urllib2.Request(url)
 
-        # Find address data
-        DataUrls = re.findall('href="(.*?)"', content)
+        try:
+            response = urllib2.urlopen(request)
+        except BaseException, err:
+            print "Невозможно открыть указанную страницу {0}.\n" \
+                  "Пожалуйста, проверьте соединение с интернетом.".format(url)
+        else:
+            usedUrls.append(url)
 
-        # Conversion in absolute address
-        convertDataUrls = [urlparse.urljoin(url, urlI) for urlI in DataUrls]
 
-        for urlList in convertDataUrls:
-            nameFile = urlList.rsplit('/', 1)[-1]
-            if '.htm' in nameFile or '.html' in nameFile:
-                # Check if the reference breaked
-                CheckReference(urlList)
+            content = response.read()
+
+            # Find address data
+            dataUrls = re.findall('href="(.*?)"', content)
+
+            # Conversion in absolute address
+            convertDataUrls = [urlparse.urljoin(url, urlI) for urlI in dataUrls]
+
+            for urlList in convertDataUrls:
+                if( not (usedUrls in convertDataUrls)):
+                    usedUrls.append(urlList)
+
+
+def CheckLinks(urls):
+    for url in urls:
+        CheckReference(url)
 
 # /////////////////////////////////////////////#
 # \/              Main                     \/ #
 def MainFunction(argv):
-    
     if (len(sys.argv) == 1):
         queuedURL = raw_input("Укажите адрес страницы в качестве параметра.\n"
                               "Формат ввода link_checker.exe http://path-to-site.com.\n"
                               "Введите URL: ")
     else:
         queuedURL = argv[1]
-
 
     isErrorInURL = True
     while (isErrorInURL):
@@ -79,8 +92,11 @@ def MainFunction(argv):
                                   "Введите URL: ")
             continue
 
+
+    CheckLinks(usedUrls)
+
     correctRef = open("AllReference.txt", 'w')
-    for url in usedUrls:
+    for url in correctUrls:
         correctRef.write(url + '\n')
     correctRef.close()
 
@@ -91,7 +107,10 @@ def MainFunction(argv):
 
     print ("Program executed")
 
-    #"https://www.python.org/"
-#/////////////////////////////////////////////#
+    # https://www.python.org/
+    # http://bochtest.blogspot.ru/
+
+
+# /////////////////////////////////////////////#
 
 MainFunction(sys.argv)
