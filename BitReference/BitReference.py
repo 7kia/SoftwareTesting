@@ -2,11 +2,6 @@
 import sys
 import re, urllib, urllib2, urlparse
 
-FailedPages = []
-# /////////////////////////////////////////////
-# @param url(type string)
-# Check bit urls in getted "url"
-# /////////////////////////////////////////////
 usedUrls = []
 correctUrls = []
 failedUrl = []
@@ -26,12 +21,12 @@ def CheckReference(page):
         # быть использован, например, при управляемом сервером согласовании
         # содержимого. Некоторые клиенты некорректно ведут себя при обработке
         # данного кода. Введено в HTTP/1.0.
+
+        status = str(code)
         if (code not in [200, 301]):
-            status = str(code)
             failedUrl.append(page + " " + status)
             # print message if not internet
         else:
-            status = str(code)
             correctUrls.append(page + " " + status)
 
     except BaseException as err:
@@ -75,7 +70,7 @@ def CheckLinks(urls):
 # /////////////////////////////////////////////#
 # \/              Main                     \/ #
 def MainFunction(argv):
-    if (len(sys.argv) == 1):
+    if (len(sys.argv) != 2):
         queuedURL = raw_input("Укажите адрес страницы в качестве параметра.\n"
                               "Формат ввода link_checker.exe http://path-to-site.com.\n"
                               "Введите URL: ")
@@ -93,7 +88,7 @@ def MainFunction(argv):
                                   "Введите URL: ")
             continue
 
-
+    del usedUrls[0]
     CheckLinks(usedUrls)
 
     correctRef = open("AllReference.txt", 'w')
@@ -107,11 +102,6 @@ def MainFunction(argv):
     incorrectRef.close()
 
     print ("Program executed")
-
-    # https://www.python.org/
-    # http://bochtest.blogspot.ru/
-
-
 # /////////////////////////////////////////////#
 
 MainFunction(sys.argv)
