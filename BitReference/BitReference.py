@@ -31,8 +31,13 @@ def CheckReference(page):
 
     except BaseException as err:
         # print("IOError error: {0}".format(err))
-        print "Невозможно открыть указанную страницу {0}.\n" \
-              "Пожалуйста, проверьте соединение с интернетом.".format(page)
+        print "Imposible open the page {0}.\n" \
+              "Please, check conect with internet.".format(page)
+
+        """
+        "Невозможно открыть указанную страницу {0}.\n" \
+        "Пожалуйста, проверьте соединение с интернетом.".format(page)
+        """
         exit()
 
 
@@ -44,8 +49,8 @@ def CheckLinksFromPage(url):
         try:
             response = urllib2.urlopen(request)
         except BaseException as err:
-            print "Невозможно открыть указанную страницу {0}.\n" \
-                  "Пожалуйста, проверьте соединение с интернетом.".format(url)
+            print "Imposible open the page {0}.\n" \
+                    "Please, check conect with internet.".format(url)
         else:
             usedUrls.append(url)
 
@@ -62,6 +67,9 @@ def CheckLinksFromPage(url):
                 if( not (usedUrls in convertDataUrls)):
                     usedUrls.append(urlList)
 
+            return True
+        return False
+
 
 def CheckLinks(urls):
     for url in urls:
@@ -71,37 +79,49 @@ def CheckLinks(urls):
 # \/              Main                     \/ #
 def MainFunction(argv):
     if (len(sys.argv) != 2):
-        queuedURL = raw_input("Укажите адрес страницы в качестве параметра.\n"
-                              "Формат ввода link_checker.exe http://path-to-site.com.\n"
-                              "Введите URL: ")
+        queuedURL = raw_input("Print address page as parametr.\n"
+                              "Format entering: link_checker.exe http://path-to-site.com.\n"
+                              "Enter URL: ")
+
+        """
+        "Укажите адрес страницы в качестве параметра.\n"
+      "Формат ввода link_checker.exe http://path-to-site.com.\n"
+      "Введите URL: "
+        """
     else:
         queuedURL = argv[1]
 
+    pageOpen = False
     isErrorInURL = True
     while (isErrorInURL):
         try:
-            CheckLinksFromPage(queuedURL)
-            break
+            pageOpen = CheckLinksFromPage(queuedURL)
+            isErrorInURL = False
         except (urllib2.URLError, ValueError) as err:
-            queuedURL = raw_input("Введенный адрес не является корректным URL.\n"
-                                  "Пожалуйста, введите адрес в формате http://path-to-site.com\n"
-                                  "Введите URL: ")
+            queuedURL = raw_input("Print address page as parametr.\n"
+                                  "Format entering: link_checker.exe http://path-to-site.com.\n"
+                                  "Enter URL: ")
             continue
 
-    del usedUrls[0]
-    CheckLinks(usedUrls)
+    if isErrorInURL == False:
+        if len(usedUrls):
+            del usedUrls[0]
 
-    correctRef = open("AllReference.txt", 'w')
-    for url in correctUrls:
-        correctRef.write(url + '\n')
-    correctRef.close()
+            CheckLinks(usedUrls)
 
-    incorrectRef = open("InvalidRefernce.txt", 'w')
-    for url in failedUrl:
-        incorrectRef.write(url + '\n')
-    incorrectRef.close()
+        if pageOpen:
+
+            correctRef = open("AllReference.txt", 'w')
+            for url in correctUrls:
+                correctRef.write(url + '\n')
+            correctRef.close()
+
+            incorrectRef = open("InvalidReference.txt", 'w')
+            for url in failedUrl:
+                incorrectRef.write(url + '\n')
+            incorrectRef.close()
 
     print ("Program executed")
 # /////////////////////////////////////////////#
-
+# http://bochtest.blogspot.ru/
 MainFunction(sys.argv)
