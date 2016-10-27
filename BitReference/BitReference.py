@@ -59,12 +59,21 @@ def CheckLinksFromPage(url):
             content = response.read()
 
             # Find address data
-            dataUrls = re.findall('href="((http|ftp)?.*?)"', content)
-
+            dataUrls = re.findall('href="(((http|ftp)s?://)?.*?(/.*?)*)"', content)
+            dataUrls2 = []
+            for data in dataUrls:
+                needDelete = False
+                for element in {"mailto:", "javascript:", "skype:"}:
+                    print data[0][:len(element)]
+                    if element == data[0][:len(element)]:
+                        print element != data[0][len(element):]
+                        needDelete = True
+                if not needDelete:
+                    dataUrls2.append(data)
             #dataUrls = re.findall('"((http|ftp)s?://.*?)"', content)
 
             # Conversion in absolute address
-            convertDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataUrls]
+            convertDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataUrls2]
 
             for urlList in convertDataUrls:
                 if( not (urlList in usedUrls)):
