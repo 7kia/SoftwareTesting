@@ -1,5 +1,5 @@
 # coding=utf-8
-import sys
+import sys, lxml.html
 import re, urllib, urllib2, urlparse
 
 usedUrls = []
@@ -9,8 +9,9 @@ queuedURL = ""
 
 
 def CheckReference(page):
+    code = ""
     try:
-        code = urllib.urlopen(page).getcode()
+        code = urllib2.urlopen(page).getcode()
         # 2xx - Success
         # 301 Moved Permanently — запрошенный документ был окончательно перенесен на новый URI,
         #  указанный в поле Location заголовка. Некоторые клиенты некорректно ведут себя при
@@ -33,12 +34,12 @@ def CheckReference(page):
         # print("IOError error: {0}".format(err))
         print "Imposible open the page {0}.\n" \
               "Please, check conect with internet.".format(page)
-
+        failedUrl.append(page + " " + err.__str__())
         """
         "Невозможно открыть указанную страницу {0}.\n" \
         "Пожалуйста, проверьте соединение с интернетом.".format(page)
         """
-        exit()
+        #exit()
 
 
 def CheckLinksFromPage(url):
@@ -58,13 +59,15 @@ def CheckLinksFromPage(url):
             content = response.read()
 
             # Find address data
-            dataUrls = re.findall('href="(.*?)"', content)
+            dataUrls = re.findall('href="((http|ftp)?.*?)"', content)
+
+            #dataUrls = re.findall('"((http|ftp)s?://.*?)"', content)
 
             # Conversion in absolute address
-            convertDataUrls = [urlparse.urljoin(url, urlI) for urlI in dataUrls]
+            convertDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataUrls]
 
             for urlList in convertDataUrls:
-                if( not (usedUrls in convertDataUrls)):
+                if( not (urlList in usedUrls)):
                     usedUrls.append(urlList)
 
             return True
@@ -74,6 +77,14 @@ def CheckLinksFromPage(url):
 def CheckLinks(urls):
     for url in urls:
         CheckReference(url)
+
+def deleteWhitespaceInEnd(url):
+    result = ""
+    for char in url:
+        if char == ' ':
+            result = url[:-1]
+
+    return result
 
 # /////////////////////////////////////////////#
 # \/              Main                     \/ #
@@ -93,6 +104,7 @@ def MainFunction(argv):
 
     pageOpen = False
     isErrorInURL = True
+    queuedURL = deleteWhitespaceInEnd(queuedURL)
     while (isErrorInURL):
         try:
             pageOpen = CheckLinksFromPage(queuedURL)
@@ -124,4 +136,5 @@ def MainFunction(argv):
     print ("Program executed")
 # /////////////////////////////////////////////#
 # http://bochtest.blogspot.ru/
+# http://links.testingcourse.ru
 MainFunction(sys.argv)
