@@ -64,9 +64,9 @@ def CheckLinksFromPage(url):
             for data in dataUrls:
                 needDelete = False
                 for element in {"mailto:", "javascript:", "skype:"}:
-                    print data[0][:len(element)]
+                    #print data[0][:len(element)]
                     if element == data[0][:len(element)]:
-                        print element != data[0][len(element):]
+                        #print element != data[0][len(element):]
                         needDelete = True
                 if not needDelete:
                     dataUrls2.append(data)
