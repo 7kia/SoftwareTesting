@@ -59,11 +59,20 @@ def CheckLinksFromPage(url):
             content = response.read()
 
             # Find address data
+            '''
+            Атрибут href может содержать:
+            Абсолютный URL — адрес страницы, документа или скрипта. Это наиболее распространенный вариант.
+            Относительный URL — адрес страницы, документа или скрипта
+            mailto: — e-mail адрес. Для написания письма откроется системный e-mail клиент.
+            javascript: — исполняемый скрипт
+            skype: — вызов абонента skype
+            # — локальная ссылка(якорь)
+            '''
             dataUrls = re.findall('href="(((http|ftp)s?://)?.*?(/.*?)*)"', content)
             dataUrls2 = []
             for data in dataUrls:
                 needDelete = False
-                for element in {"mailto:", "javascript:", "skype:"}:
+                for element in {"mailto:", "javascript:", "skype:", "#"}:
                     #print data[0][:len(element)]
                     if element == data[0][:len(element)]:
                         #print element != data[0][len(element):]
