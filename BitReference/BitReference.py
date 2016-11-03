@@ -9,6 +9,7 @@ urlsForCheck = []
 failedUrl = []
 queuedURL = ""
 queuedURLS = []
+pageOpen = False
 
 def CheckReference(page):
     code = ""
@@ -50,8 +51,6 @@ def CheckReference(page):
 
 
 def CheckLinksFromPage(url, startURL):
-
-    #if not (url in usedUrls):
     request = urllib2.Request(url)
 
     try:
@@ -59,6 +58,8 @@ def CheckLinksFromPage(url, startURL):
     except BaseException as err:
         print "Imposible open the page {0}.\n" \
                 "Please, check conect with internet.".format(url)
+
+        return False
     else:
         usedUrls.append(url)
 
@@ -85,12 +86,10 @@ def CheckLinksFromPage(url, startURL):
                     needDelete = True
             if not needDelete:
                 dataUrls2.append(data)
-        #dataUrls = re.findall('"((http|ftp)s?://.*?)"', content)
 
         # Conversion in absolute address
         convertDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataUrls2]
 
-        startURL2 = startURL
         for urlList in convertDataUrls:
             if (not (urlList in usedUrls) and not (urlList in queuedURLS) and
                     (-1 != urlList.find(startURL, 0, len(urlList))) ):  # не выходим за рамки этого сайта
@@ -98,9 +97,6 @@ def CheckLinksFromPage(url, startURL):
             if( not (urlList in usedUrls)):
                 usedUrls.append(urlList)
 
-
-        return True
-        #return False
 
 
 def CheckLinks(urls):
@@ -140,19 +136,15 @@ def MainFunction(argv, startURL):
     else:
         queuedURL = argv[1]
 
-    global pageOpen
-    pageOpen = False
+
     isErrorInURL = True
     queuedURL = deleteWhitespaceInEnd(queuedURL)
     startURL = queuedURL
     queuedURLS.append(queuedURL)
     while (len(queuedURLS)):
-        #del usedUrls
-        #if (not (queuedURLS[0] in usedUrls)):
         try:
-            pageOpen = CheckLinksFromPage(queuedURLS[0], startURL)
+            CheckLinksFromPage(queuedURLS[0], startURL)
             CheckLinks(usedUrls)
-            #usedUrls = []
             '''
             ####################################
             # Delete reference is'nt web-page
@@ -179,8 +171,6 @@ def MainFunction(argv, startURL):
             del usedUrls[0]
 
             CheckLinks(usedUrls)
-
-        #if pageOpen:
 
         correctRef = open("AllReference.txt", 'w')
         for url in correctUrls:
