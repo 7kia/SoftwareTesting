@@ -2,6 +2,7 @@
 import sys, re, urllib2, urlparse
 
 usedUrls = []
+listOtherRef = []
 startURL = ""
 correctUrls = []
 urlsForCheck = []
@@ -65,6 +66,7 @@ def CheckLinksFromPage(url, startURL):
         skype: — вызов абонента skype
         # — локальная ссылка(якорь)
         '''
+        dataAllUrls = re.findall('href="((http|ftp)?.*?)"', content)
         dataUrls = re.findall('href="(((http|ftp)s?://)?.*?(/.*?)*)"', content)
         dataUrls2 = []
         for data in dataUrls:
@@ -78,6 +80,7 @@ def CheckLinksFromPage(url, startURL):
                 dataUrls2.append(data)
 
         # Conversion in absolute address
+        convertAllDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataAllUrls]
         convertDataUrls = [urlparse.urljoin(url, urlI[0]) for urlI in dataUrls2]
 
         for urlList in convertDataUrls:
@@ -86,6 +89,12 @@ def CheckLinksFromPage(url, startURL):
                 queuedURLS.append(urlList)
             if( not (urlList in usedUrls)):
                 usedUrls.append(urlList)
+
+        for urlList in convertAllDataUrls:
+            if ( (urlList not in convertDataUrls) ):  # не выходим за рамки этого сайта
+                listOtherRef.append(urlList)
+            #if( not (urlList in usedUrls)):
+            #   usedUrls.append(urlList)
 
 
 
@@ -163,6 +172,8 @@ def MainFunction(argv, startURL):
 
         allRef = open("AllReference.txt", 'w')
         for url in correctUrls:
+            allRef.write(url + '\n')
+        for url in listOtherRef:
             allRef.write(url + '\n')
         for url in failedUrl:
             allRef.write(url + '\n')
