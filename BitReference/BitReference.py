@@ -1,6 +1,5 @@
 # coding=utf-8
-import sys, lxml.html
-import re, urllib, urllib2, urlparse
+import sys, re, urllib2, urlparse
 
 usedUrls = []
 startURL = ""
@@ -30,24 +29,18 @@ def CheckReference(page):
         if (code not in [200, 301]):
             if (page + " " + status) not in failedUrl:
                 failedUrl.append(page + " " + status)
-            # print message if not internet
         else:
             if (page + " " + status) not in correctUrls:
                 correctUrls.append(page + " " + status)
                 urlsForCheck.append(page)
 
     except BaseException as err:
-        # print("IOError error: {0}".format(err))
-        print "Imposible open the page {0}.\n" \
-              "Please, check conect with internet.".format(page)
-
-        if (page + " " + err.__str__()) not in failedUrl:
-            failedUrl.append(page + " " + err.__str__())
+        if (page + " " + str(err.code)) not in failedUrl:
+            failedUrl.append(page + " " + str(err.code))
         """
         "Невозможно открыть указанную страницу {0}.\n" \
         "Пожалуйста, проверьте соединение с интернетом.".format(page)
         """
-        #exit()
 
 
 def CheckLinksFromPage(url, startURL):
@@ -56,9 +49,6 @@ def CheckLinksFromPage(url, startURL):
     try:
         response = urllib2.urlopen(request)
     except BaseException as err:
-        print "Imposible open the page {0}.\n" \
-                "Please, check conect with internet.".format(url)
-
         return False
     else:
         usedUrls.append(url)
@@ -163,7 +153,6 @@ def MainFunction(argv, startURL):
             queuedURL = raw_input("Print address page as parametr.\n"
                                   "Format entering: link_checker.exe http://path-to-site.com.\n"
                                   "Enter URL: ")
-            #continue
         del queuedURLS[0]
 
     if isErrorInURL == False:
@@ -172,12 +161,15 @@ def MainFunction(argv, startURL):
 
             CheckLinks(usedUrls)
 
-        correctRef = open("AllReference.txt", 'w')
+        allRef = open("AllReference.txt", 'w')
         for url in correctUrls:
-            correctRef.write(url + '\n')
-        correctRef.close()
+            allRef.write(url + '\n')
+        for url in failedUrl:
+            allRef.write(url + '\n')
+        allRef.close()
 
         incorrectRef = open("InvalidReference.txt", 'w')
+
         for url in failedUrl:
             incorrectRef.write(url + '\n')
         incorrectRef.close()
