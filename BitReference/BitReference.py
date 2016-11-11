@@ -34,10 +34,12 @@ def CheckReference(page):
             if (page + " " + status) not in correctUrls:
                 correctUrls.append(page + " " + status)
                 urlsForCheck.append(page)
-
+    except urllib2.HTTPError as err:
+        if (page + " " + str(err.getcode()) ) not in failedUrl:
+            failedUrl.append(page + " " + str(err.getcode()) )
     except BaseException as err:
-        if (page + " " + str(err.code)) not in failedUrl:
-            failedUrl.append(page + " " + str(err.code))
+        if (page + " " + err.__str__()) not in failedUrl:
+            failedUrl.append(page + " " + err.__str__())
         """
         "Невозможно открыть указанную страницу {0}.\n" \
         "Пожалуйста, проверьте соединение с интернетом.".format(page)
@@ -111,14 +113,6 @@ def deleteWhitespaceInEnd(url):
 
     return result
 
-def DeleteNotWebPage(urls):
-    for url in urls:
-        for element in {".htm", ".html"}:# TODO : не обрабатывает пустые ссылки
-            # print data[0][:len(element)]
-            if element != url[:len(element)]:
-                del url
-                break
-
 # /////////////////////////////////////////////#
 # \/               Main                     \/ #
 def MainFunction(argv, startURL):
@@ -144,19 +138,6 @@ def MainFunction(argv, startURL):
         try:
             CheckLinksFromPage(queuedURLS[0], startURL)
             CheckLinks(usedUrls)
-            '''
-            ####################################
-            # Delete reference is'nt web-page
-            urlsForCheck = correctUrls
-            DeleteNotWebPage(urlsForCheck)
-            # Check page the sait
-            for urlElement in urlsForCheck:
-                CheckLinksFromPage(urlElement)
-                CheckLinks(usedUrls)
-            ####################################
-            '''
-
-
             isErrorInURL = False
         except (urllib2.URLError, ValueError) as err:
             queuedURL = raw_input("Print address page as parametr.\n"
