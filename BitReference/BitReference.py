@@ -27,7 +27,7 @@ def CheckReference(page):
         # данного кода. Введено в HTTP/1.0.
 
         status = str(code)
-        if (code not in [200, 301]):
+        if (code not in [200, 301, 302]):
             if (page + " " + status) not in failedUrl:
                 failedUrl.append(page + " " + status)
         else:
