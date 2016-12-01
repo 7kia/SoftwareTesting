@@ -16,22 +16,9 @@ std::vector<TrianlgeType> GetTriangleType(float firstSide
 	TriangleSides sides = { firstSide, secondSide, thirdSide };
 	std::vector<TrianlgeType> types;
 
-	try
-	{
+
 		CheckCorrectnessSides(sides);
-	}
-	catch (const CTriangleSideIncorrect & exception)
-	{
-		//cout << exeption.what() << endl;
-		(void)exception;
-		types.push_back(TrianlgeType::None);
-		return types;
-	}
-	catch (const exception & exeption)// TODO : fix
-	{
-		(void)exeption;
-		throw;// Отправка исключения наружу
-	}
+	
 
 
 	AddTypeBySides(types, sides);
@@ -74,13 +61,13 @@ void AddTypeBySides(std::vector<TrianlgeType>& types, const TriangleSides & side
 	bool isEqualFirstAndThird = (sides[0] == sides[2]);
 	bool isEqualSecondAndThird = (sides[1] == sides[2]);
 
+	if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
+	{
+		types.push_back(TrianlgeType::Isosceles);
+	}
 	if (isEqualFirstAndSecond && isEqualSecondAndThird)
 	{
 		types.push_back(TrianlgeType::Equilateral);
-	}
-	else if (isEqualFirstAndSecond || isEqualFirstAndThird || isEqualSecondAndThird)
-	{
-		types.push_back(TrianlgeType::Isosceles);
 	}
 
 	if (types.empty())
