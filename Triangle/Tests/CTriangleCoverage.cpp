@@ -9,7 +9,7 @@ struct CTriangleCoverageTestsFixture_
 {
 	CTriangle triangle;
 
-	const float expectedFirst = 1;
+	const float expectedFirst = 5;
 	const float expectedSecond = 3;
 	const float expectedThird = 4;
 
@@ -67,7 +67,13 @@ BOOST_AUTO_TEST_CASE(check_alternative_constructor)
 
 BOOST_AUTO_TEST_CASE(set_side_must_be_more_zero)
 {
-	BOOST_CHECK(false);
+	BOOST_CHECK_THROW(triangle.SetSide(0.f, 0), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(triangle.SetSide(0.f, 1), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(triangle.SetSide(0.f, 2), CTriangleSideIncorrect);
+
+	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 0), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 1), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 2), CTriangleSideIncorrect);
 }
 
 BOOST_AUTO_TEST_SUITE_END()// CTriangleCoverageTestsFixture_

@@ -16,7 +16,6 @@ enum class TrianlgeType
 	,	Isosceles// Равнобедренный
 	,	Equilateral // Равносторонний
 };
-using TriangleSides = std::array<float, 3>;
 
 static std::map<size_t, std::string> TrianlgeTypeStringPresentation = {
 	{ int(TrianlgeType::None) , "Не треугольник" }
@@ -68,30 +67,26 @@ public:
 
 	//--------------------------------------------
 
-	void			SetSide(float value, size_t index);
-	float			GetSide(size_t index);
+	void						SetSide(float value, size_t index);
+	float						GetSide(size_t index);
+
+	std::vector<TrianlgeType>	GetTriangleType();
+
 
 private:
 	void			CheckIndex(size_t index);
+	void			CheckCorrectnessSide(float side);
+
+	void			CheckCorrectnessSides();
+	void			CheckSumSides(float firstSide, float secondSide, float thirdSide);
+	void			AddTypeBySides(std::vector<TrianlgeType>& types);
+
+
 //////////////////////////////////////////////////////////////////////
 // Data
 private:
 	float			m_sides[3];
 };
-
-std::vector<TrianlgeType> GetTriangleType(float firstSide
-										, float secondSide
-										, float thirdSide);
-
-void CheckCorrectnessSides(const TriangleSides & sides);
-
-void CheckCorrectnessSide(float side);
-
-void CheckSum(float firstSide
-			, float secondSide
-			, float thirdSide);
-
-void AddTypeBySides(std::vector<TrianlgeType> & types, const TriangleSides & sides);
 
 
 std::string ToString(const std::vector<TrianlgeType>& types);
