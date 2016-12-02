@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <array>
+#include <map>
 
 static const float IN_DEGREES = 57.29f;
 static const float EPSILON = 0.1f;
@@ -15,8 +16,15 @@ enum class TrianlgeType
 	,	Isosceles// Равнобедренный
 	,	Equilateral // Равносторонний
 };
-
 using TriangleSides = std::array<float, 3>;
+
+static std::map<size_t, std::string> TrianlgeTypeStringPresentation = {
+	{ int(TrianlgeType::None) , "Не треугольник" }
+	,{ int(TrianlgeType::Equilateral) , "Равносторонний" }
+	,{ int(TrianlgeType::Isosceles) , "Равнобедренный" }
+	,{ int(TrianlgeType::Simple) , "Обычный" }
+};
+
 
 namespace Messages
 {

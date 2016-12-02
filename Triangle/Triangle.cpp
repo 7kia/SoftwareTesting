@@ -81,27 +81,9 @@ void AddTypeBySides(std::vector<TrianlgeType>& types, const TriangleSides & side
 std::string ToString(const std::vector<TrianlgeType>& types)
 {
 	std::string result;
-	for (const auto & element : types)
+	for (auto element : types)
 	{
-
-		switch (element)
-		{
-		case TrianlgeType::None:
-			result += "Не треугольник";// Is not triangle
-			break;
-		case TrianlgeType::Equilateral:
-			result += "Равносторонний";//Equilateral 
-			break;
-		case TrianlgeType::Isosceles:
-			result += "Равнобедренный";//Isosceles 
-			break;
-		case TrianlgeType::Simple:
-			result += "Обычный";// Simple 
-			break;
-		default:
-			break;
-		}
-	
+		result += TrianlgeTypeStringPresentation[int(element)];	
 	}
 	return result;
 }
