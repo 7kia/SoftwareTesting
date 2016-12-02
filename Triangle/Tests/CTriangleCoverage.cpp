@@ -49,6 +49,15 @@ BOOST_AUTO_TEST_CASE(set_sides)
 
 }
 
+BOOST_AUTO_TEST_CASE(set_and_get_sides_check_index)
+{
+	BOOST_CHECK_THROW(triangle.GetSide(-1), std::runtime_error);
+	BOOST_CHECK_THROW(triangle.GetSide(3), std::runtime_error);
+
+	BOOST_CHECK_THROW(triangle.SetSide(1.f, -1), std::runtime_error);
+	BOOST_CHECK_THROW(triangle.SetSide(1.f, 3), std::runtime_error);
+}
+
 BOOST_AUTO_TEST_CASE(check_default_constructor)
 {
 	BOOST_CHECK(triangle.GetSide(0) == 0.f);
@@ -75,6 +84,8 @@ BOOST_AUTO_TEST_CASE(set_side_must_be_more_zero)
 	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 1), CTriangleSideIncorrect);
 	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 2), CTriangleSideIncorrect);
 }
+
+
 
 BOOST_AUTO_TEST_SUITE_END()// CTriangleCoverageTestsFixture_
 

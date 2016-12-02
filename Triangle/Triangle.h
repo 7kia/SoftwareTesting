@@ -6,9 +6,6 @@
 #include <array>
 #include <map>
 
-static const float IN_DEGREES = 57.29f;
-static const float EPSILON = 0.1f;
-
 enum class TrianlgeType
 {
 		None
@@ -18,11 +15,13 @@ enum class TrianlgeType
 };
 
 static std::map<size_t, std::string> TrianlgeTypeStringPresentation = {
-	{ int(TrianlgeType::None) , "Не треугольник" }
-	,{ int(TrianlgeType::Equilateral) , "Равносторонний" }
-	,{ int(TrianlgeType::Isosceles) , "Равнобедренный" }
-	,{ int(TrianlgeType::Simple) , "Обычный" }
+		{ int(TrianlgeType::None) , "Не треугольник" }
+	,	{ int(TrianlgeType::Equilateral) , "Равносторонний" }
+	,	{ int(TrianlgeType::Isosceles) , "Равнобедренный" }
+	,	{ int(TrianlgeType::Simple) , "Обычный" }
 };
+
+std::string ToString(const std::vector<TrianlgeType>& types);
 
 
 namespace Messages
@@ -40,13 +39,6 @@ public:
 	CTriangleSideIncorrect(const std::string & message);// TODO : add parametres
 };
 
-// TODO : transfer to other place
-template <typename T>
-bool IsBetween(const T& value, const T& lowerBound, const T& upperBound)
-{
-	return (value >= lowerBound) && (value <= upperBound);
-}
-
 class CTriangle
 {
 public:
@@ -54,24 +46,19 @@ public:
 	CTriangle(float firstSide
 			, float secondSide
 			, float thirdSide);
+
+//////////////////////////////////////////////////////////////////////
+// Static data
+public:
+	static const size_t AMOUNT_SIDES = 3;
+
 //////////////////////////////////////////////////////////////////////
 // Methods
 public:
-	static const size_t AMOUNT_SIDES = 3;
-	//--------------------------------------------
-	// NameInterface
-
-	/*
-	there place  something inheritance methods from NameInterface
-	*/
-
-	//--------------------------------------------
-
 	void						SetSide(float value, size_t index);
 	float						GetSide(size_t index);
 
 	std::vector<TrianlgeType>	GetTriangleType();
-
 
 private:
 	void			CheckIndex(size_t index);
@@ -81,15 +68,10 @@ private:
 	void			CheckSumSides(float firstSide, float secondSide, float thirdSide);
 	void			AddTypeBySides(std::vector<TrianlgeType>& types);
 
-
 //////////////////////////////////////////////////////////////////////
 // Data
 private:
 	float			m_sides[3];
 };
-
-
-std::string ToString(const std::vector<TrianlgeType>& types);
-
 
 

@@ -3,18 +3,24 @@
 
 using namespace std;
 
+// TODO : transfer to other place
+template <typename T>
+bool IsBetween(const T& value, const T& lowerBound, const T& upperBound)
+{
+	return (value >= lowerBound) && (value <= upperBound);
+}
+
 CTriangleSideIncorrect::CTriangleSideIncorrect(const std::string & message)
 	: std::exception(message.c_str())
 {
 }
-
 
 std::string ToString(const std::vector<TrianlgeType>& types)
 {
 	std::string result;
 	for (auto element : types)
 	{
-		result += TrianlgeTypeStringPresentation[int(element)];	
+		result += TrianlgeTypeStringPresentation[size_t(element)];	
 	}
 	return result;
 }
@@ -50,7 +56,7 @@ float CTriangle::GetSide(size_t index)
 
 void CTriangle::CheckIndex(size_t index)
 {
-	if (!IsBetween(index, size_t(0), AMOUNT_SIDES))
+	if (!IsBetween(index, size_t(0), AMOUNT_SIDES - 1))
 	{
 		throw std::runtime_error("Side have the index not exist");
 	}
