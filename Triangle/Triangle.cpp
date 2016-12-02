@@ -87,3 +87,40 @@ std::string ToString(const std::vector<TrianlgeType>& types)
 	}
 	return result;
 }
+
+CTriangle::CTriangle()
+{
+	SetSide(0.f, 0);
+	SetSide(0.f, 1);
+	SetSide(0.f, 2);
+}
+
+CTriangle::CTriangle(float firstSide
+					, float secondSide
+					, float thirdSide)
+{
+	SetSide(firstSide, 0);
+	SetSide(secondSide, 1);
+	SetSide(thirdSide, 2);
+}
+
+void CTriangle::SetSide(float value, size_t index)
+{
+	CheckIndex(index);
+
+	m_sides[index] = value;
+}
+
+float CTriangle::GetSide(size_t index)
+{
+	CheckIndex(index);
+	return m_sides[index];
+}
+
+void CTriangle::CheckIndex(size_t index)
+{
+	if (!IsBetween(index, size_t(0), AMOUNT_SIDES))
+	{
+		throw std::runtime_error("Side have the index not exist");
+	}
+}

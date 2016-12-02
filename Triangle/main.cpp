@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
 	{
 		arguments[index - 1] = argv[index];
 		boost::replace_all(arguments[index - 1], ".", ",");
-
 	}
 	cout << ToString(GetTriangleType(stof(arguments[0])
 									, stof(arguments[1])

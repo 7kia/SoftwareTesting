@@ -41,5 +41,8 @@
     <ClCompile Include="..\Triangle.cpp">
       <Filter>TestClasses</Filter>
     </ClCompile>
+    <ClCompile Include="CTriangleCoverage.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

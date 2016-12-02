@@ -28,7 +28,9 @@ static std::map<size_t, std::string> TrianlgeTypeStringPresentation = {
 
 namespace Messages
 {
-	static std::string MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT = "”кажите длины сторон в качестве параметров. ‘ормат ввода: triangle.exe a b c";
+	static std::string MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT = 
+		"”кажите длины сторон в качестве параметров.\
+‘ормат ввода: triangle.exe a b c";
 }
 
 
@@ -45,6 +47,37 @@ bool IsBetween(const T& value, const T& lowerBound, const T& upperBound)
 {
 	return (value >= lowerBound) && (value <= upperBound);
 }
+
+class CTriangle
+{
+public:
+	CTriangle();
+	CTriangle(float firstSide
+			, float secondSide
+			, float thirdSide);
+//////////////////////////////////////////////////////////////////////
+// Methods
+public:
+	static const size_t AMOUNT_SIDES = 3;
+	//--------------------------------------------
+	// NameInterface
+
+	/*
+	there place  something inheritance methods from NameInterface
+	*/
+
+	//--------------------------------------------
+
+	void			SetSide(float value, size_t index);
+	float			GetSide(size_t index);
+
+private:
+	void			CheckIndex(size_t index);
+//////////////////////////////////////////////////////////////////////
+// Data
+private:
+	float			m_sides[3];
+};
 
 std::vector<TrianlgeType> GetTriangleType(float firstSide
 										, float secondSide
