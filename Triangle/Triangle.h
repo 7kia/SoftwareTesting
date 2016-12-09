@@ -6,6 +6,10 @@
 #include <array>
 #include <map>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <cmath>
+
 enum class TrianlgeType
 {
 		None
@@ -79,4 +83,6 @@ private:
 	float			m_sides[3];
 };
 
-
+static float RadianToDegree(float radians) {
+	return (radians * 180.f) / float(M_PI);
+}

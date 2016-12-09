@@ -115,24 +115,24 @@ BOOST_AUTO_TEST_SUITE(Square)
 BOOST_AUTO_TEST_SUITE_END()// Square
 
 BOOST_AUTO_TEST_SUITE(Angle)
-BOOST_AUTO_TEST_CASE(get_angle)
-{
-	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(0), 5.332f, 5.f);
-	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(1), 5.332f, 5.f);
-	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(2), 5.332f, 5.f);
-}
-BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_incorrect_get_index)
-{
-	BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(-1), runtime_error);
-	BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(4), runtime_error);
+	BOOST_AUTO_TEST_CASE(get_angle)
+	{
+		BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(0), 117.3f, 5.f);
+		BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(1), 36.1f, 5.f);
+		BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(2), 26.4f, 5.f);
+	}
+	BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_incorrect_get_index)
+	{
+		BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(-1), runtime_error);
+		BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(4), runtime_error);
 
-}
-BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_triangle_is_degenerate)
-{
-	BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(0), CTriangleSideIncorrect);
-	BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(1), CTriangleSideIncorrect);
-	BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(2), CTriangleSideIncorrect);
-}
+	}
+	BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_triangle_is_degenerate)
+	{
+		BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(0), CTriangleSideIncorrect);
+		BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(1), CTriangleSideIncorrect);
+		BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetAngle(2), CTriangleSideIncorrect);
+	}
 BOOST_AUTO_TEST_SUITE_END()// Square
 
 

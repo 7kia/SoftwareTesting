@@ -141,39 +141,34 @@ float CTriangle::GetAngle(size_t index) const
 	float second = m_sides[1];
 	float third = m_sides[2];
 
+	float adj1;
+	float adj2;
+	float opp;
+
 	switch (index)
 	{
 	case 0:
+		adj1 = second;
+		adj2 = third;
+		opp = first;
 		break;
 	case 1:
+		adj1 = first;
+		adj2 = third;
+		opp = second;
 		break;
 	case 2:
+		adj1 = first;
+		adj2 = second;
+		opp = third;
 		break;
 	default:
 		break;
 	}
-	/*
-	if (angle == 'alpha') :
-			adj1 = b
-			adj2 = c
-			opp = a
-			elif(angle == 'beta') :
-			adj1 = a
-			adj1 = c
-			opp = b
-			elif(angle == 'gamma') :
-			adj1 = a
-			adj2 = b
-			opp = c
-		else:
-	return False
 
-		f = (adj1 ** 2 + adj2 ** 2 - opp ** 2) / (2.0 * adj1 * adj2)
-		return math.degrees(math.acos(f))
-	*/
-		
-
-	return 0.0f;
+	float cosinus = ((adj1 * adj1) + (adj2 * adj2) - (opp * opp)) 
+					/ (2.0 * adj1 * adj2);
+	return RadianToDegree(acos(cosinus));
 }
 
 
