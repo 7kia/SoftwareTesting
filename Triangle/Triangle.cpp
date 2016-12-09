@@ -141,9 +141,9 @@ float CTriangle::GetAngle(size_t index) const
 	float second = m_sides[1];
 	float third = m_sides[2];
 
-	float adj1;
-	float adj2;
-	float opp;
+	float adj1 = 0.f;
+	float adj2 = 0.f;
+	float opp = 0.f;
 
 	switch (index)
 	{
