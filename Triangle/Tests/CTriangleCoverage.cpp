@@ -2,6 +2,7 @@
 #include "../Triangle.h"
 #include <windows.h>
 
+using namespace std;
 
 BOOST_AUTO_TEST_SUITE(CTriangleCoverageTests)
 
@@ -47,6 +48,19 @@ BOOST_AUTO_TEST_SUITE(Sides)
 		BOOST_CHECK(triangle.GetSide(2) == expectedThird);
 
 	}
+	BOOST_AUTO_TEST_SUITE(check_indexes)
+		BOOST_AUTO_TEST_CASE(set_sides_check_indexes)
+		{
+			BOOST_CHECK_THROW(triangle.SetSide(expectedFirst, -1), runtime_error);
+			BOOST_CHECK_THROW(triangle.SetSide(expectedFirst, 4), runtime_error);
+		}
+		BOOST_AUTO_TEST_CASE(get_sides_check_indexes)
+		{
+			BOOST_CHECK_THROW(triangle.GetSide(-1);, runtime_error);
+			BOOST_CHECK_THROW(triangle.GetSide(4); , runtime_error);
+		}
+	BOOST_AUTO_TEST_SUITE_END()// check_indexes
+
 	BOOST_AUTO_TEST_CASE(set_and_get_sides_check_index)
 	{
 		BOOST_CHECK_THROW(triangle.GetSide(-1), std::runtime_error);
@@ -109,8 +123,9 @@ BOOST_AUTO_TEST_CASE(get_angle)
 }
 BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_incorrect_get_index)
 {
-	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(-1), 5.332f, 5.f);
-	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetAngle(4), 5.332f, 5.f);
+	BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(-1), runtime_error);
+	BOOST_CHECK_THROW(CTriangle(6.f, 4.f, 3.f).GetAngle(4), runtime_error);
+
 }
 BOOST_AUTO_TEST_CASE(get_angle_throw_exception_if_triangle_is_degenerate)
 {
