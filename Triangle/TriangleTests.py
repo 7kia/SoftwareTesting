@@ -173,109 +173,79 @@ class TriangleTest(unittest.TestCase):
         t = Triangle(4, 4, 2)
         self.assertTrue(t.isTriangle())
 
-    # значение некорректное, это не треугольник, функция isTriangle() должна вернуть false
-    def testIsNotTriangle(self):
-        t = Triangle(-2, 3, 5)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(2, -3, 5)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(2, 3, -5)
-        self.assertFalse(t.isTriangle())
-
-        t = Triangle(4, 0, 1)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(4, 1, 0)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(0, 1, 4)
-        self.assertFalse(t.isTriangle())
-
-        t = Triangle(4, 0, 1)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(4, 1, 0)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(0, 1, 4)
-        self.assertFalse(t.isTriangle())
-
-        t = Triangle(1, 2, 3)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(1, 3, 2)
-        self.assertFalse(t.isTriangle())
-        t = Triangle(3, 1, 2)
-        self.assertFalse(t.isTriangle())
-
-    def testRecognize_isosceles_triangle(self):
-        #self.assertEquals(t.getType(), 'right')
-
-        t = Triangle(2, 2, 2)
-        self.assertEquals(t.getType(), 'equilateral')
-
-        t = Triangle(3, 2, 3)
-        self.assertEquals(t.getType(), 'isosceles')
-
-        t = Triangle(2, 2, 3)
-        self.assertEquals(t.getType(), 'isosceles')
-
-        t = Triangle(3, 2, 2)
-        self.assertEquals(t.getType(), 'isosceles')
-
-        t = Triangle(3.5, 4, 4.5)
-        self.assertEquals(t.getType(), 'common')
-
-        t = Triangle(3, 4, 5)
-        self.assertEquals(t.getType(), 'right')
-
-        t = Triangle(5, 4, 3)
-        self.assertEquals(t.getType(), 'right')
-
-        t = Triangle(4, 5, 3)
-        self.assertEquals(t.getType(), 'right')
 
     # Complete
-    def testSide_less_or_equal_zero(self):
-        self.assertEquals(Triangle(1, 1, 0).getType(), 'degenerate')
-        self.assertEquals(Triangle(1, 0, 1).getType(), 'degenerate')
-        self.assertEquals(Triangle(0, 1, 1).getType(), 'degenerate')
+    def testTriangle_is_degenerate_if_side_less_or_equal_zero(self):
+        tList = { Triangle(1, 1, 0), Triangle(1, 0, 1), Triangle(0, 1, 1),
+                  Triangle(1, 1, -1), Triangle(1, -1, 1),  Triangle(-1, 1, 1)}
+        for t in tList:
+            self.assertEquals(t.getType(), 'degenerate')
+            self.assertFalse(t.isTriangle())
 
-        self.assertEquals(Triangle(1, 1, -1).getType(), 'degenerate')
-        self.assertEquals(Triangle(1, -1, 1).getType(), 'degenerate')
-        self.assertEquals(Triangle(-1, 1, 1).getType(), 'degenerate')
     # Complete
-    def testSide_less_or_equal_zero(self):
+    def testTriangle_is_degenerate_if_sides_not_comply_other_rules(self):
         self.assertEquals(Triangle(1, 2, 3).getType(), 'degenerate')
         self.assertEquals(Triangle(4, 20, 3).getType(), 'degenerate')
         self.assertEquals(Triangle(5, 6, 16).getType(), 'degenerate')
         self.assertEquals(Triangle(50, 6, 1).getType(), 'degenerate')
 
-    def testCalculateSquare(self):
+    # Complete
+    def testRecognize_common_triangle(self):
+        self.assertEquals(Triangle(2, 3, 4).getType(), 'common')
+        self.assertEquals(Triangle(5, 2, 4).getType(), 'common')
+        self.assertEquals(Triangle(6, 4, 3).getType(), 'common')
+
+    # Complete
+    def testRecognize_isosceles_triangle(self):
+        self.assertEquals(Triangle(2, 2, 3).getType(), 'isosceles')
+        self.assertEquals(Triangle(3, 4, 4).getType(), 'isosceles')
+        self.assertEquals(Triangle(3, 4, 3).getType(), 'isosceles')
+
+    # Complete
+    def testRecognize_equilateral_triangle(self):
+        self.assertEquals(Triangle(2, 2, 2).getType(), 'equilateral')
+        self.assertEquals(Triangle(30, 30, 30).getType(), 'equilateral')
+
+    # Complete
+    def testRecognize_right_triangle(self):
+        self.assertEquals(Triangle(3, 4, 5).getType(), 'right')
+        self.assertEquals(Triangle(5, 3, 4).getType(), 'right')
+        self.assertEquals(Triangle(4, 5, 3).getType(), 'right')
+
+    # Complete
+    def testCalculate_square(self):
         t = Triangle(1, 1, 1)
         self.assertAlmostEqual(t.calculateSquare(), 0.4330127018922193)
-        t = Triangle(4, 2, 3)
-        self.assertAlmostEqual(t.calculateSquare(), 2.9047375096555625)
-        t = Triangle(254, 200, 201)
-        self.assertNotEquals(t.calculateSquare(), 19703)
+        t = Triangle(3, 4, 5)
+        self.assertAlmostEqual(t.calculateSquare(), 6.0)
 
-    def testCalculateAngle(self):
-        t = Triangle(0, 2, 2)
-        self.assertEqual(t.calculateAngle('alpha'), 0)
-        self.assertEqual(t.calculateAngle('beta'), 0)
-        self.assertEqual(t.calculateAngle('gamma'), 0)
-
+    # Complete
+    def testCalculate_angle(self):
         t = Triangle(2, 2, 2)
         self.assertAlmostEqual(t.calculateAngle('alpha'), 60)
         self.assertAlmostEqual(t.calculateAngle('beta'), 60)
         self.assertAlmostEqual(t.calculateAngle('gamma'), 60)
 
-        t = Triangle(3.5, 3.7, 4)
-        self.assertAlmostEqual(t.calculateAngle('alpha'), 53.90050830367129)
-        self.assertAlmostEqual(t.calculateAngle('beta'), 58.667748502405736)
-        self.assertAlmostEqual(t.calculateAngle('gamma'), 67.43174319392298)
+        t = Triangle(3, 5, 4)
+        self.assertAlmostEqual(t.calculateAngle('alpha'), 36.86989764584401)
+        self.assertAlmostEqual(t.calculateAngle('beta'), 90.0)
+        self.assertAlmostEqual(t.calculateAngle('gamma'), 53.13010235415599)
 
-        t = Triangle(3.8, 3.5, 4)
-        self.assertNotAlmostEqual(t.calculateAngle('alpha'), 53.3)
-        self.assertNotAlmostEqual(t.calculateAngle('beta'), 58.27)
-        self.assertNotAlmostEqual(t.calculateAngle('gamma'), 67.1317)
+        t = Triangle(3, 5, 3)
+        self.assertAlmostEqual(t.calculateAngle('alpha'), 33.55730976192071)
+        self.assertAlmostEqual(t.calculateAngle('beta'), 112.88538047615857)
+        self.assertAlmostEqual(t.calculateAngle('gamma'), 33.55730976192071)
 
-        self.assertEqual(t.calculateAngle('tetta'), 0)
+    # Complete
+    def testCalculate_angle_get_zero_if_triangle_is_degenerate(self):
+        t = Triangle(1, 2, 3)
+        self.assertEqual(t.calculateAngle('alpha'), 0)
+        self.assertEqual(t.calculateAngle('beta'), 0)
+        self.assertEqual(t.calculateAngle('gamma'), 0)
+
+    # Complete
+    def testCalculate_angle_get_zero_if_incorrect_get_name_angle(self):
+        self.assertEqual(Triangle(3, 5, 4).calculateAngle('unknow'), 0)
 
 
 if __name__ == '__main__':
