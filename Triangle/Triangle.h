@@ -60,12 +60,15 @@ public:
 
 	std::vector<TrianlgeType>	GetTriangleType();
 
+	float						GetSquare() const;
 private:
 	void			CheckIndex(size_t index);
 	void			CheckCorrectnessSide(float side);
 
 	void			CheckCorrectnessSides();
-	void			CheckSumSides(float firstSide, float secondSide, float thirdSide);
+	void			CheckSumSides(float firstSide
+								, float secondSide
+								, float thirdSide);
 	void			AddTypeBySides(std::vector<TrianlgeType>& types);
 
 //////////////////////////////////////////////////////////////////////

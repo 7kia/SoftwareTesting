@@ -13,7 +13,6 @@ struct CTriangleCoverageTestsFixture_
 	const float expectedSecond = 3;
 	const float expectedThird = 4;
 
-
 	CTriangleCoverageTestsFixture_()
 	{
 		SetConsoleOutputCP(1251);
@@ -85,7 +84,14 @@ BOOST_AUTO_TEST_CASE(set_side_must_be_more_zero)
 	BOOST_CHECK_THROW(triangle.SetSide(-1.f, 2), CTriangleSideIncorrect);
 }
 
+BOOST_AUTO_TEST_CASE(get_square)
+{
 
+	BOOST_CHECK_CLOSE(CTriangle(2.f, 2.f, 2.f).GetSquare(), 1.732f, 5.f);
+	BOOST_CHECK_CLOSE(CTriangle(3.f, 4.f, 3.f).GetSquare(), 4.472f, 5.f);
+	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetSquare(), 5.332f, 5.f);
+
+}
 
 BOOST_AUTO_TEST_SUITE_END()// CTriangleCoverageTestsFixture_
 

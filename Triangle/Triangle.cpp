@@ -83,8 +83,8 @@ void CTriangle::CheckCorrectnessSides()
 }
 
 void CTriangle::CheckSumSides(float firstSide
-						, float secondSide
-						, float thirdSide)
+							, float secondSide
+							, float thirdSide)
 {
 	if (!((firstSide + secondSide) > thirdSide))
 	{
@@ -102,6 +102,21 @@ std::vector<TrianlgeType> CTriangle::GetTriangleType()
 	AddTypeBySides(types);
 
 	return types;
+}
+
+float CTriangle::GetSquare() const
+{
+	float first = m_sides[0];
+	float second = m_sides[1];
+	float third = m_sides[2];
+
+
+	float selfPerimeter = (first + second + third) / 2.f;
+	
+	return sqrt(selfPerimeter * (selfPerimeter - first)
+								* (selfPerimeter - second)
+								* (selfPerimeter - third)
+				);
 }
 
 
