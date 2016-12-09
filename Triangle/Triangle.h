@@ -61,8 +61,10 @@ public:
 	std::vector<TrianlgeType>	GetTriangleType() const;
 
 	float						GetSquare() const;
+	float						GetAngle(size_t index) const;
 private:
-	void			CheckIndex(size_t index);
+	void			CheckCorrecntnessType() const;
+	void			CheckIndex(size_t index) const;
 	void			CheckCorrectnessSide(float side) const;
 
 	void			CheckCorrectnessSides() const;

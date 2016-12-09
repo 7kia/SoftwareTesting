@@ -54,7 +54,18 @@ float CTriangle::GetSide(size_t index)
 	return m_sides[index];
 }
 
-void CTriangle::CheckIndex(size_t index)
+void CTriangle::CheckCorrecntnessType() const
+{
+	auto types = GetTriangleType();
+
+	if (types == std::vector<TrianlgeType>(1, TrianlgeType::None))
+	{
+		throw std::runtime_error("The triangle is degenerate, it not have square");
+	}
+
+}
+
+void CTriangle::CheckIndex(size_t index) const
 {
 	if (!IsBetween(index, size_t(0), AMOUNT_SIDES - 1))
 	{
@@ -106,12 +117,8 @@ std::vector<TrianlgeType> CTriangle::GetTriangleType() const
 
 float CTriangle::GetSquare() const
 {
-	auto types = GetTriangleType();
+	CheckCorrecntnessType();
 
-	if (types == std::vector<TrianlgeType>(1, TrianlgeType::None))
-	{
-		throw std::runtime_error("The triangle is degenerate, it not have square");
-	}
 	float first = m_sides[0];
 	float second = m_sides[1];
 	float third = m_sides[2];
@@ -123,6 +130,50 @@ float CTriangle::GetSquare() const
 								* (selfPerimeter - second)
 								* (selfPerimeter - third)
 				);
+}
+
+float CTriangle::GetAngle(size_t index) const
+{
+	CheckIndex(index);
+	CheckCorrecntnessType();
+
+	float first = m_sides[0];
+	float second = m_sides[1];
+	float third = m_sides[2];
+
+	switch (index)
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	default:
+		break;
+	}
+	/*
+	if (angle == 'alpha') :
+			adj1 = b
+			adj2 = c
+			opp = a
+			elif(angle == 'beta') :
+			adj1 = a
+			adj1 = c
+			opp = b
+			elif(angle == 'gamma') :
+			adj1 = a
+			adj2 = b
+			opp = c
+		else:
+	return False
+
+		f = (adj1 ** 2 + adj2 ** 2 - opp ** 2) / (2.0 * adj1 * adj2)
+		return math.degrees(math.acos(f))
+	*/
+		
+
+	return 0.0f;
 }
 
 
