@@ -167,7 +167,7 @@ float CTriangle::GetAngle(size_t index) const
 	}
 
 	float cosinus = ((adj1 * adj1) + (adj2 * adj2) - (opp * opp)) 
-					/ (2.0 * adj1 * adj2);
+					/ (2.f * adj1 * adj2);
 	return RadianToDegree(acos(cosinus));
 }
 

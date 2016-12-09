@@ -1,5 +1,6 @@
 #include "stdafx.h"
-#include "../Triangle.h"
+//#include "../Triangle.h"
+#include <Triangle.h>
 #include <windows.h>
 
 using namespace std;

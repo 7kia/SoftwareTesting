@@ -53,6 +53,7 @@ void CheckParametrs(int argc, char *argv[])
 	}
 }
 
+/*
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "Russian");
@@ -75,12 +76,13 @@ int main(int argc, char *argv[])
 		arguments[index - 1] = argv[index];
 		boost::replace_all(arguments[index - 1], ".", ",");
 	}
-	cout << ToString(GetTriangleType(stof(arguments[0])
-									, stof(arguments[1])
-									, stof(arguments[2])
-									)
-					);
+	CTriangle triangle(stof(arguments[0])
+					, stof(arguments[1])
+					, stof(arguments[2]));
+	cout << ToString(triangle.GetTriangleType());
 
     return 0;
 }
+
+*/
 
