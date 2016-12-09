@@ -6,13 +6,16 @@
 	4. В указанных функциях есть места, написанные не очень эффективно. Перепишите их. 
 	   Удостоверьтесь, что ничего не сломано — все ваши тесты проходят.
 	5. Посчитайте покрытие тестами. Для этого используйте инструмент coverage https://pypi.python.org/pypi/coverage
+
+	C:\Python27\Scripts\coverage.exe run --branch TriangleTests.py
+	C:\Python27\Scripts\coverage.exe report
+
+
 '''
 
 import unittest
 import math
 
-MESSAGE_AMOUNT_ARGUMENTS_IS_INCORRECT =  "Укажите длины сторон в качестве параметров." \
-                                         "Формат ввода: triangle.exe a b c"
 class Triangle:
     '''
 		a, b, c — стороны треугольника
@@ -33,11 +36,15 @@ class Triangle:
     def getC(self):
         return self.triangle[2]
 
-    def calculatePerimeter(self):
+    def getPerimeter(self):
         '''
 			расчет периметра
 		'''
-        return sum(self.triangle)
+        a = self.triangle[0]
+        b = self.triangle[1]
+        c = self.triangle[2]
+
+        return a + b + c
 
     def calculateSquare(self):
         '''
@@ -47,7 +54,7 @@ class Triangle:
         b = self.triangle[1]
         c = self.triangle[2]
 
-        p = (a + b + c) / 2.0
+        p = self.getPerimeter() / 2.0
         s = math.sqrt(p * (p - a) * (p - b) * (p - c))
         return s
 
@@ -124,11 +131,11 @@ class Triangle:
             type = 'isosceles'
         elif (b == c) and (b != a):
             type = 'isosceles'
-        elif (a ** 2 == b ** 2 + c ** 2):
+        elif ((a ** 2) == ((b ** 2) + (c ** 2))):
             type = 'right'
-        elif (b ** 2 == a ** 2 + c ** 2):
+        elif ((b ** 2) == ((a ** 2) + (c ** 2))):
             type = 'right'
-        elif (c ** 2 == a ** 2 + b ** 2):
+        elif ((c ** 2) == ((a ** 2) + (b ** 2))):
             type = 'right'
 
         return type
@@ -141,53 +148,59 @@ class TriangleTest(unittest.TestCase):
     def tearDown(self):
         print "Test finished"
 
-    def testGetSides(self):
-        t = Triangle(2, 3, 4)
-        self.assertEqual(t.getA(), 2)
+    def testGet_sides(self):
+        t = Triangle(5, 3, 4)
+        self.assertEqual(t.getA(), 5)
         self.assertEqual(t.getB(), 3)
         self.assertEqual(t.getC(), 4)
 
-        t = Triangle(1, 1, 1)
-        self.assertEqual(t.getA(), 1)
-        self.assertEqual(t.getB(), 1)
-        self.assertNotEqual(t.getC(), 4)
-
-
-    def testCalculatePerimeter(self):
-        t = Triangle(2, 3, 4)
-        self.assertEqual(t.getA(), 2)
-        self.assertEqual(t.getB(), 3)
-        self.assertEqual(t.getC(), 4)
-
-        t = Triangle(1, 1, 1)
-        self.assertEqual(t.getA(), 1)
-        self.assertEqual(t.getB(), 1)
-        self.assertNotEqual(t.getC(), 4)
-
-    # Проверяем, что на корректных значениях программа работает
-    def testIsTriangle(self):
-        t = Triangle(2, 3, 4)
-        self.assertTrue(t.isTriangle())
-        t = Triangle(1, 1, 1)
-        self.assertTrue(t.isTriangle())
-        t = Triangle(4, 4, 2)
-        self.assertTrue(t.isTriangle())
-
+    def testGet_perimeter(self):
+        t = Triangle(5, 3, 4)
+        self.assertEqual(t.getPerimeter(), 12)
 
     # Complete
     def testTriangle_is_degenerate_if_side_less_or_equal_zero(self):
-        tList = { Triangle(1, 1, 0), Triangle(1, 0, 1), Triangle(0, 1, 1),
-                  Triangle(1, 1, -1), Triangle(1, -1, 1),  Triangle(-1, 1, 1)}
-        for t in tList:
-            self.assertEquals(t.getType(), 'degenerate')
-            self.assertFalse(t.isTriangle())
+        t = Triangle(1, 1, 0)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(1, 0, 1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(0, 1, 1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(1, 1, -1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(1, -1, 1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(-1, 1, 1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
 
     # Complete
     def testTriangle_is_degenerate_if_sides_not_comply_other_rules(self):
-        self.assertEquals(Triangle(1, 2, 3).getType(), 'degenerate')
-        self.assertEquals(Triangle(4, 20, 3).getType(), 'degenerate')
-        self.assertEquals(Triangle(5, 6, 16).getType(), 'degenerate')
-        self.assertEquals(Triangle(50, 6, 1).getType(), 'degenerate')
+        t = Triangle(1, 2, 3)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(4, 20, 3)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(5, 6, 16)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
+
+        t = Triangle(50, 6, 1)
+        self.assertEquals(t.getType(), 'degenerate')
+        self.assertFalse(t.isTriangle())
 
     # Complete
     def testRecognize_common_triangle(self):
