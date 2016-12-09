@@ -86,11 +86,17 @@ BOOST_AUTO_TEST_CASE(set_side_must_be_more_zero)
 
 BOOST_AUTO_TEST_CASE(get_square)
 {
-
 	BOOST_CHECK_CLOSE(CTriangle(2.f, 2.f, 2.f).GetSquare(), 1.732f, 5.f);
 	BOOST_CHECK_CLOSE(CTriangle(3.f, 4.f, 3.f).GetSquare(), 4.472f, 5.f);
 	BOOST_CHECK_CLOSE(CTriangle(6.f, 4.f, 3.f).GetSquare(), 5.332f, 5.f);
+}
 
+BOOST_AUTO_TEST_CASE(get_square_throw_exception_if_triangle_is_degenerate)
+{
+	BOOST_CHECK_THROW(CTriangle(1.f, 2.f, 3.f).GetSquare(), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(CTriangle(4.f, 20.f, 3.f).GetSquare(), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(CTriangle(5.f, 6.f, 16.f).GetSquare(), CTriangleSideIncorrect);
+	BOOST_CHECK_THROW(CTriangle(50.f, 6.f, 1.f).GetSquare(), CTriangleSideIncorrect);
 }
 
 BOOST_AUTO_TEST_SUITE_END()// CTriangleCoverageTestsFixture_

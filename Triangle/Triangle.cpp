@@ -62,7 +62,7 @@ void CTriangle::CheckIndex(size_t index)
 	}
 }
 
-void CTriangle::CheckCorrectnessSide(float side)
+void CTriangle::CheckCorrectnessSide(float side) const
 {
 	if (side <= 0.f)
 	{
@@ -71,7 +71,7 @@ void CTriangle::CheckCorrectnessSide(float side)
 }
 
 
-void CTriangle::CheckCorrectnessSides()
+void CTriangle::CheckCorrectnessSides() const
 {
 	CheckCorrectnessSide(m_sides[0]);
 	CheckCorrectnessSide(m_sides[1]);
@@ -84,7 +84,7 @@ void CTriangle::CheckCorrectnessSides()
 
 void CTriangle::CheckSumSides(float firstSide
 							, float secondSide
-							, float thirdSide)
+							, float thirdSide) const
 {
 	if (!((firstSide + secondSide) > thirdSide))
 	{
@@ -93,7 +93,7 @@ void CTriangle::CheckSumSides(float firstSide
 }
 
 
-std::vector<TrianlgeType> CTriangle::GetTriangleType()
+std::vector<TrianlgeType> CTriangle::GetTriangleType() const
 {
 	std::vector<TrianlgeType> types;
 
@@ -106,6 +106,12 @@ std::vector<TrianlgeType> CTriangle::GetTriangleType()
 
 float CTriangle::GetSquare() const
 {
+	auto types = GetTriangleType();
+
+	if (types == std::vector<TrianlgeType>(1, TrianlgeType::None))
+	{
+		throw std::runtime_error("The triangle is degenerate, it not have square");
+	}
 	float first = m_sides[0];
 	float second = m_sides[1];
 	float third = m_sides[2];
@@ -120,7 +126,7 @@ float CTriangle::GetSquare() const
 }
 
 
-void CTriangle::AddTypeBySides(std::vector<TrianlgeType>& types)
+void CTriangle::AddTypeBySides(std::vector<TrianlgeType>& types) const
 {
 	bool isEqualFirstAndSecond = (m_sides[0] == m_sides[1]);
 	bool isEqualFirstAndThird = (m_sides[0] == m_sides[2]);

@@ -58,18 +58,18 @@ public:
 	void						SetSide(float value, size_t index);
 	float						GetSide(size_t index);
 
-	std::vector<TrianlgeType>	GetTriangleType();
+	std::vector<TrianlgeType>	GetTriangleType() const;
 
 	float						GetSquare() const;
 private:
 	void			CheckIndex(size_t index);
-	void			CheckCorrectnessSide(float side);
+	void			CheckCorrectnessSide(float side) const;
 
-	void			CheckCorrectnessSides();
+	void			CheckCorrectnessSides() const;
 	void			CheckSumSides(float firstSide
 								, float secondSide
-								, float thirdSide);
-	void			AddTypeBySides(std::vector<TrianlgeType>& types);
+								, float thirdSide) const;
+	void			AddTypeBySides(std::vector<TrianlgeType>& types) const;
 
 //////////////////////////////////////////////////////////////////////
 // Data
