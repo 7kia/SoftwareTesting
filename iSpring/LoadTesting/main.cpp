@@ -72,14 +72,16 @@ int main(int argc, char * argv[])
 
 		tester.CreateThreads();
 		tester.ResumeThreads();
+		system("pause");
 
 	}
 	catch (const std::exception & exception)
 	{
 		std::cout << exception.what() << std::endl;
+		system("pause");
+
 	}
 
-	system("pause");
 	return 0;
 
 }
