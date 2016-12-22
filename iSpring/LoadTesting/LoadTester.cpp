@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "LoadTester.h"
 
-CLoadTester::CLoadTester(float CpuLoad, size_t MemomryLoad)
+CLoadTester::CLoadTester(size_t CpuNumber, size_t MemomrySize)
 {
-	m_cpuLoad = CpuLoad;
-	sizeof(OneMegabyte);
-	m_memory.resize(MemomryLoad);
+	m_cpuLoad = CpuNumber;
+	m_memory.resize(MemomrySize);
 }
 
 CLoadTester::~CLoadTester()
@@ -31,12 +30,12 @@ int CLoadTester::GetAffinityMask(size_t amountThread, size_t threadIndex)
 
 void CLoadTester::CreateThreads()
 {
-	for (size_t index = 0; index < m_amountCpu; ++index)
+	for (size_t index = 0; index < m_cpuLoad; ++index)
 	{
 		m_dataForThread.push_back(SDataForThread());
 
 		m_threads.push_back(CreateThread(NULL, 0, &ThreadFunction, &m_dataForThread[index], CREATE_SUSPENDED, NULL));
-		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(index, m_amountCpu));
+		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_amountCpu, index));
 	}
 }
 

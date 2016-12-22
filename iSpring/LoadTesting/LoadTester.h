@@ -7,7 +7,7 @@
 class CLoadTester
 {
 public:
-	CLoadTester(float CpuLoad, size_t MemomryLoad);
+	CLoadTester(size_t CpuNumber, size_t MemomrySize);
 	~CLoadTester();
 
 	struct SDataForThread
